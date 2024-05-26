@@ -1,11 +1,17 @@
 'use client'
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import Cookies from 'js-cookie'
+import jwt from 'jsonwebtoken';
+import { useRouter } from 'next/navigation'
+import withAuth from '../utils/withAuth';
+
 import './styles.css'
 
-export default function Component() {
+function Checker() {
   const [file, setFile] = useState(null);
   const [transcription, setTranscription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,6 +19,8 @@ export default function Component() {
   const [transcribed, setTranscribed] = useState(false);
   const [lyricsVerified, setLyricsVerified] = useState(false);
   const [lyricCheck, setLyricCheck] = useState("");
+
+  const router = useRouter()
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -52,14 +60,19 @@ export default function Component() {
     setLyricsVerified(false);
   };
 
+  const handleLogout = () =>{
+    Cookies.remove('jwtToken');
+    router.push('/login')
+  }
+
   const handleVerify = async () => {
     try {
-      const response = await fetch('http://localhost:4000/check',{
+      const response = await fetch('http://localhost:4000/check', {
         method: 'POST',
         body: transcription,
       });
-    
-      if(response.ok) {
+
+      if (response.ok) {
         const data = await response.json()
         setLyricCheck(data.text);
       } else {
@@ -73,16 +86,22 @@ export default function Component() {
 
   return (
     <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
+
       <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper' }}>
-        <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{fontWeight:'bold'}}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }} >
+          <Button onClick={handleLogout} class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mb-5">
+            Logout
+          </Button>
+        </Box>
+        <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
           Audio Transcription and Lyric Verification
         </Typography>
         <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
           <Box mt={2}>
-            <Typography variant="h5" component="h2" gutterBottom sx={{fontWeight:'bold'}}>
+            <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
               Upload Audio
             </Typography>
-            <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': {bgcolor: '#eeeeee'} }}>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
               {fileUploaded ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                   <Typography variant="body2" color="textSecondary">File Uploaded</Typography>
@@ -103,7 +122,7 @@ export default function Component() {
             </Box>
           </Box>
           <Box mt={2}>
-            <Typography variant="h5" component="h2" gutterBottom sx={{fontWeight:'bold'}}>
+            <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
               Transcription and Lyric Verification
             </Typography>
             <TextareaAutosize
@@ -119,18 +138,18 @@ export default function Component() {
             <Box mt={2}>
               <Tooltip title="Sube un audio" disableHoverListener={file} arrow>
                 <span>
-                  <Button 
-                    variant="contained" 
-                    sx={{ 
-                      fontSize: '100%', 
-                      borderRadius:'8px', 
-                      height: '50px', 
-                      bgcolor: 'black', 
-                      '&:hover': {bgcolor:'#323232'}, 
-                      cursor: loading ? 'not-allowed' : 'pointer' 
-                    }} 
-                    fullWidth 
-                    onClick={handleTranscribe} 
+                  <Button
+                    variant="contained"
+                    sx={{
+                      fontSize: '100%',
+                      borderRadius: '8px',
+                      height: '50px',
+                      bgcolor: 'black',
+                      '&:hover': { bgcolor: '#323232' },
+                      cursor: loading ? 'not-allowed' : 'pointer'
+                    }}
+                    fullWidth
+                    onClick={handleTranscribe}
                     disabled={loading || !file}
                   >
                     {loading ? 'Transcribing...' : 'Transcribe Audio'}
@@ -141,18 +160,18 @@ export default function Component() {
             <Box mt={2}>
               <Tooltip title={"Escribe o transcribe alguna letra"} disableHoverListener={!(transcription === '')} arrow>
                 <span>
-                  <Button 
-                    variant="contained" 
-                    sx={{ 
-                      fontSize: '100%', 
-                      borderRadius:'8px', 
-                      height: '50px', 
-                      bgcolor: 'black', 
-                      '&:hover': {bgcolor:'#323232'}, 
-                      cursor: !lyricsVerified ? 'not-allowed' : 'pointer' 
-                    }} 
-                    fullWidth 
-                    onClick={handleVerify} 
+                  <Button
+                    variant="contained"
+                    sx={{
+                      fontSize: '100%',
+                      borderRadius: '8px',
+                      height: '50px',
+                      bgcolor: 'black',
+                      '&:hover': { bgcolor: '#323232' },
+                      cursor: !lyricsVerified ? 'not-allowed' : 'pointer'
+                    }}
+                    fullWidth
+                    onClick={handleVerify}
                     disabled={!lyricsVerified || transcription === ''}
                   >
                     Verify Lyrics
@@ -162,7 +181,11 @@ export default function Component() {
             </Box>
           </Box>
         </Box>
+
       </Paper>
+
     </Container>
   );
 }
+
+export default withAuth(Checker)

@@ -1,11 +1,19 @@
 'use client'
-import { useState } from 'react';
-
+import { useState, useLayoutEffect, useEffect } from 'react';
+import { useRouter } from 'next/navigation'
+import withAuth from '../utils/withAuth';
+import Cookies from 'js-cookie'
+import jwt from 'jsonwebtoken';
 import './styles.css'
 
-export default function Login() {
+
+
+function Login() {
     const [file, setFile] = useState(null);
     const [transcription, setTranscription] = useState("");
+    const router = useRouter()
+    const [isVerifying, setIsVerifying] = useState(true);
+
 
 
     const handleFileChange = (event) => {
@@ -13,7 +21,30 @@ export default function Login() {
         setFileUploaded(true);
     };
 
+    const handleGoogle = async (event) => {
+        event.preventDefault()
+        window.location.href = 'http://localhost:4000/auth/google';
+    }
 
+    useEffect(() => {
+        const token = Cookies.get('jwtToken');
+        if (token) {
+            router.push('/checker');
+        } else {
+            setIsVerifying(false);
+        }
+    }, [router]);
+    if (isVerifying) {
+        return <div class="flex items-center justify-center min-h-screen p-5 bg-gray-100 min-w-screen">
+            <div class="flex space-x-2 animate-pulse">
+                <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+            </div>
+
+        </div>
+            ;
+    }
 
     return (
         <section class="bg-gray-50 dark:bg-gray-900">
@@ -26,7 +57,7 @@ export default function Login() {
                             <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                                 Sign in to your account
                             </h1>
-                            <form class="space-y-4 md:space-y-6" action="#">
+                            <form class="space-y-4 md:space-y-6">
                                 <div>
                                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                                     <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
@@ -48,6 +79,7 @@ export default function Login() {
                                 </div>
                                 <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                                 <button
+                                    type='button'
                                     class="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                                     <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="-0.5 0 48 48" version="1.1">
@@ -71,7 +103,7 @@ export default function Login() {
                                             </g>
                                         </g>
                                     </svg>
-                                    <span><a href="http://localhost:4000/auth/google">Continue with Google</a></span>
+                                    <span onClick={handleGoogle}>Continue with Google</span>
                                 </button>
                                 <button
                                     class="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
@@ -110,3 +142,5 @@ export default function Login() {
         </section>
     );
 }
+
+export default Login
