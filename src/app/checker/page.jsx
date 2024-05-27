@@ -33,7 +33,7 @@ function Checker() {
     formData.append('audio', file);
 
     try {
-      const response = await fetch('http://localhost:4000/transcribe', {
+      const response = await fetch('http://localhost:4000/transcribe/audio', {
         method: 'POST',
         body: formData,
       });
