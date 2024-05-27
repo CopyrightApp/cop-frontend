@@ -9,18 +9,13 @@ import './styles.css'
 
 
 function Login() {
-    const [file, setFile] = useState(null);
-    const [transcription, setTranscription] = useState("");
     const router = useRouter()
     const [isVerifying, setIsVerifying] = useState(true);
 
-
-
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-        setFileUploaded(true);
-    };
-
+    const handleRegister = () =>{
+        router.push("/register")
+    }
+    
     const handleGoogle = async (event) => {
         event.preventDefault()
         window.location.href = 'http://localhost:4000/auth/google';
@@ -128,7 +123,7 @@ function Login() {
                                     <span>Continue with Github</span>
                                 </button>
                                 <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                                    Don’t have an account yet? <a href="#" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Register here</a>
+                                    Don’t have an account yet? <a onClick={handleRegister} class="font-medium text-primary-600 hover:underline dark:text-primary-500">Register here</a>
                                 </p>
                             </form>
                         </div>
