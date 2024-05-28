@@ -9,6 +9,8 @@ import jwt from 'jsonwebtoken';
 import { useRouter } from 'next/navigation'
 import withAuth from '../utils/withAuth';
 
+import { handleTranscribe } from '../functionsApi/api';
+
 import './styles.css'
 
 function Checker() {
@@ -27,26 +29,16 @@ function Checker() {
     setFileUploaded(true);
   };
 
-  const handleTranscribe = async () => {
+  const transcribeFile = async () => {
     setLoading(true);
-    const formData = new FormData();
-    formData.append('audio', file);
+    const result = await handleTranscribe(file);
 
-    try {
-      const response = await fetch('http://localhost:4000/transcribe/audio', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setTranscription(data.transcription);
-        setTranscribed(true);
-      } else {
-        console.error('Error al transcribir el audio');
-      }
-    } catch (error) {
-      console.error('Error de red:', error);
+    if (result.success) {
+      setTranscription(result.transcription);
+      setTranscribed(true);
+      setLyricsVerified(true);
+    } else {
+      console.error('Error al transcribir el audio');
     }
 
     setLoading(false);
@@ -120,6 +112,7 @@ function Checker() {
                 </label>
               )}
             </Box>
+            
           </Box>
           <Box mt={2}>
             <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -149,7 +142,7 @@ function Checker() {
                       cursor: loading ? 'not-allowed' : 'pointer'
                     }}
                     fullWidth
-                    onClick={handleTranscribe}
+                    onClick={transcribeFile}
                     disabled={loading || !file}
                   >
                     {loading ? 'Transcribing...' : 'Transcribe Audio'}
