@@ -6,7 +6,10 @@ import Cookies from 'js-cookie'
 import jwt from 'jsonwebtoken';
 import './styles.css'
 
+import { Button } from '@mui/material';
 
+import Footer from '../components/footer';
+import Navbar from '../components/navbar';
 
 function Login() {
     const router = useRouter()
@@ -30,11 +33,11 @@ function Login() {
         }
     }, [router]);
     if (isVerifying) {
-        return <div class="flex items-center justify-center min-h-screen p-5 bg-gray-100 min-w-screen">
-            <div class="flex space-x-2 animate-pulse">
-                <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-                <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-                <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+        return <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100 min-w-screen">
+            <div className="flex space-x-2 animate-pulse">
+                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
             </div>
 
         </div>
@@ -42,41 +45,43 @@ function Login() {
     }
 
     return (
-        <section class="bg-gray-50 dark:bg-gray-900">
-            <div class="grid grid-cols-12 gap-4">
-                <div class="w-full col-span-5 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                    <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <>
+        <Navbar />
+        <section >
+            <div className="grid grid-cols-12 gap-4">
+                <div className="w-full col-span-5 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+                    <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                     </a>
-                    <div class="w-full bg-white md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    <div className="w-full bg-white md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 border-1 border-gray-300 rounded-xl">
+                        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                            <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl dark:text-black">
                                 Sign in to your account
                             </h1>
-                            <form class="space-y-4 md:space-y-6">
+                            <form className="space-y-4 md:space-y-6">
                                 <div>
-                                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                                    <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
+                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Your email</label>
+                                    <input type="email" name="email" id="email" className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
                                 </div>
                                 <div>
-                                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                    <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                                    <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Password</label>
+                                    <input type="password" name="password" id="password" placeholder="••••••••" className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="" />
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-start">
+                                        <div className="flex items-center h-5">
+                                            <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="" />
                                         </div>
-                                        <div class="ml-3 text-sm">
-                                            <label for="remember" class="text-gray-500 dark:text-gray-300">Remember me</label>
+                                        <div className="ml-3 text-sm">
+                                            <label for="remember" className="text-gray-500">Remember me</label>
                                         </div>
                                     </div>
-                                    <a href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
+                                    <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                                 </div>
-                                <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                                <Button type="submit" fullWidth sx={{borderRadius: '10px', height: '40px', color: 'white', bgcolor:'black', '&:hover': { bgcolor: '#323232'}}}>Sign in</Button>
                                 <button
                                     type='button'
-                                    class="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                    className="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                    <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="-0.5 0 48 48" version="1.1">
 
                                         <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -101,8 +106,8 @@ function Login() {
                                     <span onClick={handleGoogle}>Continue with Google</span>
                                 </button>
                                 <button
-                                    class="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                    className="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                    <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 73 73" version="1.1">
                                         <g id="team-collaboration/version-control/github" stroke="none" stroke-width="1" fill="none"
                                             fill-rule="evenodd">
@@ -122,19 +127,21 @@ function Login() {
 
                                     <span>Continue with Github</span>
                                 </button>
-                                <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                                    Don’t have an account yet? <a onClick={handleRegister} class="font-medium text-primary-600 hover:underline dark:text-primary-500">Register here</a>
+                                <p className="text-sm font-light dark:text-gray-500">
+                                    Don’t have an account yet? <a onClick={handleRegister} className="font-medium text-primary-600 hover:underline dark:text-primary-500">Register here</a>
                                 </p>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="col-span-7 bg-blue-500">
-                    <img class="w-full h-full" src="https://ksandk.com/wp-content/uploads/6806514-1.jpg" />
+                <div className="col-span-7 bg-blue-500">
+                    <img className="w-full h-full" src="https://previews.123rf.com/images/argus456/argus4561403/argus456140300226/26392256-m%C3%BAsica-negro-notas-sobre-un-fondo-blanco-s%C3%B3lido.jpg" />
                 </div>
             </div>
 
         </section>
+        <Footer />
+        </>
     );
 }
 
