@@ -16,6 +16,9 @@ import './styles.css'
 import spanish from '../languajes/spanish.json'
 import english from '../languajes/english.json'
 
+import Footer from '../components/footer';
+import Navbar from '../components/navbar';
+
 
 function Checker() {
   const [file, setFile] = useState(null);
@@ -91,15 +94,9 @@ function Checker() {
   };
 
   return (
+    <>
+    <Navbar />
     <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <Button onClick={() => handleLanguageChange(language === 'en' ? 'es' : 'en')} class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mb-5">
-         {language === 'en' ? 'Español' : 'English'}
-        </Button>
-        <Button onClick={handleLogout} class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mb-5 ml-2">
-          {getTranslations().Logout}
-        </Button>
-      </Box>
       <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper' }}>
         <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
         {getTranslations().Title}
@@ -194,6 +191,8 @@ function Checker() {
       </Paper>
 
     </Container>
+    <Footer />
+    </>
   );
 }
 
