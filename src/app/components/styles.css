@@ -1,0 +1,29 @@
+#toolbar {
+    display: flex;
+    background-color: black;
+    height: 65px;
+    align-items: center;
+    padding-left: 1.2%;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+}#toolbar h4 {
+    display: flex;
+    margin-left: auto;
+    color: #ffffff;
+    margin-right: 1.2%;
+    /* color: #1D35F7; */
+}#toolbar h2 {
+    color: #ffffff;
+    left: 0;
+    right: 0;
+    text-align: center;
+    pointer-events: none;
+}
+
+#iconoUsuario {
+    display: flex;
+    color: #ffffff;
+    margin-right: 1.2%;
+    scale: 1.4;
+}

@@ -1,0 +1,17 @@
+{
+    "Title": "Transcripción y Verificación de Letra",
+    "UploadAudio": "Subir Audio",
+    "ClickToUpload": "Haga clic para subir",
+    "OrDragAudio": "ó arrastre y suelte",
+    "TypesOfAudio": "MP3, WAV, OGG subir hasta 100MB",
+    "Transcription": "Transcripción y Verificación de Letra",
+    "Description": "La letra transcrita aparecerá aquí. Puede escribir la letra si lo deseas",
+    "TranscribeButton": "Transcribir audio",
+    "TranscribeButton2": "Transcribiendo...",
+    "VerifyButton": "Verificar letra",
+    "Logout": "Cerrar sesión",
+    "Tooltip": "Sube un audio",
+    "Tooltip2": "Escribe o transcribe alguna letra",
+    "FileUploaded": "Archivo subido",
+    "DeleteButton": "Eliminar"
+}

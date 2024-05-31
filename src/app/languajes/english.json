@@ -1,0 +1,17 @@
+{
+    "Title": "Audio Transcription and Lyric Verification",
+    "UploadAudio": "Upload Audio",
+    "ClickToUpload": "Click to upload",
+    "OrDragAudio": "or drag and drop",
+    "TypesOfAudio": "MP3, WAV, OGG up to 100MB",
+    "Transcription": "Transcription and Lyric Verification",
+    "Description": "Transcribed lyrics will appear here. You can write the lyrics if you want.",
+    "TranscribeButton": "Transcribe Audio",
+    "TranscribeButton2": "Transcribing...",
+    "VerifyButton": "Verify Lyrics",
+    "Logout": "Logout",
+    "Tooltip": "Upload an audio",
+    "Tooltip2": "Write or transcribe some lyrics",
+    "FileUploaded": "File Uploaded",
+    "DeleteButton": "Delete"
+}
