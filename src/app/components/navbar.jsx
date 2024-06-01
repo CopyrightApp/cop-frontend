@@ -10,7 +10,9 @@ import Cookies from 'js-cookie';
 import Link from 'next/link';
 import './styles.css';
 
-const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Italian', 'Portuguese', 'Japanese'];
+import { useAppContext } from "../context";
+
+const languages = ['English', 'Español', 'French', 'German', 'Chinese', 'Italian', 'Portuguese', 'Japanese'];
 
 function Navbar() {
   const theme = useTheme();
@@ -18,6 +20,11 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setLanguage } = useAppContext();
+
+  const handleChangeLanguage = (newLanguage) => {
+    setLanguage(newLanguage);
+  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -160,7 +167,7 @@ function Navbar() {
           <List>
             {languages.map((language) => (
               <ListItem key={language}>
-                <ListItemButton sx={{color:'black'}} onClick={() => console.log(`Selected language: ${language}`)}>
+                <ListItemButton sx={{color:'black'}} onClick={() => handleChangeLanguage(language)}>
                   {language}
                 </ListItemButton>
               </ListItem>
