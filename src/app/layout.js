@@ -1,4 +1,5 @@
 import "./globals.css";
+import  { AppWrapper }  from "./context/index.jsx";
 
 export const metadata = {
   title: "Lyric Checker",
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <AppWrapper>
+        <body>{children}</body>
+      </AppWrapper>     
     </html>
   );
 }

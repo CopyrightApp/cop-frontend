@@ -1,24 +1,15 @@
-'use client'
-import { useLayoutEffect, useState } from 'react';
+'use client';
+import React, { useState } from 'react';
 import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-import Cookies from 'js-cookie'
-import jwt from 'jsonwebtoken';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import withAuth from '../utils/withAuth';
-
 import { handleTranscribe } from '../functionsApi/api';
-
-import './styles.css'
-
-import spanish from '../languajes/spanish.json'
-import english from '../languajes/english.json'
-
+import './styles.css';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
-
+import { useTranslation } from 'react-i18next'; 
 
 function Checker() {
   const [file, setFile] = useState(null);
@@ -28,18 +19,8 @@ function Checker() {
   const [transcribed, setTranscribed] = useState(false);
   const [lyricsVerified, setLyricsVerified] = useState(false);
   const [lyricCheck, setLyricCheck] = useState("");
-  const [language, setLanguage] = useState("en");
-
-  const router = useRouter()
-
-  const handleLanguageChange = (selectedLanguage) => {
-    setLanguage(selectedLanguage);
-  };
-
-  const getTranslations = () => {
-    return language === 'es' ? spanish : english;
-  }
-
+  const { t } = useTranslation();
+  const router = useRouter();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -69,10 +50,6 @@ function Checker() {
     setLyricsVerified(false);
   };
 
-  const handleLogout = () =>{
-    Cookies.remove('jwtToken');
-    router.push('/login')
-  }
 
   const handleVerify = async () => {
     try {
@@ -95,97 +72,96 @@ function Checker() {
 
   return (
     <>
-    <Navbar />
-    <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
-      <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper' }}>
-        <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
-        {getTranslations().Title}
-        </Typography>
-        <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
-          <Box mt={2}>
-            <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
-            {getTranslations().UploadAudio}
-            </Typography>
-            <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
-              {fileUploaded ? (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                  <Typography variant="body2" color="textSecondary">{getTranslations().FileUploaded}</Typography>
-                  <Button onClick={handleDeleteFile} variant="outlined" startIcon={<DeleteIcon />}>{getTranslations().DeleteButton}</Button>
-                </Box>
-              ) : (
-                <label htmlFor="audio-upload" style={{ textAlign: 'center', cursor: 'pointer', width: '100%', height: '100%' }}>
-                  <UploadIcon fontSize="large" sx={{ color: 'grey.500' }} />
-                  <Typography variant="body2" color="textSecondary">
-                    <span style={{ fontWeight: 'bold' }}>{getTranslations().ClickToUpload}</span> {getTranslations().OrDragAudio}
-                  </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                  {getTranslations().TypesOfAudio}
-                  </Typography>
-                  <Input id="audio-upload" type="file" accept="audio/*" onChange={handleFileChange} sx={{ display: 'none' }} />
-                </label>
-              )}
-            </Box>
-            
-          </Box>
-          <Box mt={2}>
-            <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
-            {getTranslations().Transcription}
-            </Typography>
-            <TextareaAutosize
-              minRows={6}
-              placeholder={getTranslations().Description}
-              style={{ width: '100%', padding: 16, border: '1px solid', borderRadius: 10, borderColor: '#DEDEDE', backgroundColor: 'white' }}
-              value={transcription}
-              onChange={(e) => {
-                setTranscription(e.target.value);
-                setLyricsVerified(true);
-              }}
-            />
+      <Navbar />
+      <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
+        <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper' }}>
+          <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+            {t('Title')}
+          </Typography>
+          <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
             <Box mt={2}>
-              <Tooltip title={ getTranslations().Tooltip } disableHoverListener={file} arrow>
-                <span>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      fontSize: '100%',
-                      borderRadius: '8px',
-                      height: '50px',
-                      bgcolor: 'black',
-                      '&:hover': { bgcolor: '#323232' },
-                      cursor: loading ? 'not-allowed' : 'pointer'
-                    }}
-                    fullWidth
-                    onClick={transcribeFile}
-                    disabled={loading || !file}
-                  >
-                    {loading ? getTranslations().TranscribeButton2 : getTranslations().TranscribeButton }
-                  </Button>
-                </span>
-              </Tooltip>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+                {t('UploadAudio')}
+              </Typography>
+              <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
+                {fileUploaded ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                    <Typography variant="body2" color="textSecondary">{t('FileUploaded')}</Typography>
+                    <Button onClick={handleDeleteFile} variant="outlined" startIcon={<DeleteIcon />}>{t('DeleteButton')}</Button>
+                  </Box>
+                ) : (
+                  <label htmlFor="audio-upload" style={{ textAlign: 'center', cursor: 'pointer', width: '100%', height: '100%' }}>
+                    <UploadIcon fontSize="large" sx={{ color: 'grey.500' }} />
+                    <Typography variant="body2" color="textSecondary">
+                      <span style={{ fontWeight: 'bold' }}>{t('ClickToUpload')}</span> {t('OrDragAudio')}
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      {t('TypesOfAudio')}
+                    </Typography>
+                    <Input id="audio-upload" type="file" accept="audio/*" onChange={handleFileChange} sx={{ display: 'none' }} />
+                  </label>
+                )}
+              </Box>
             </Box>
             <Box mt={2}>
-              <Tooltip title={ getTranslations().Tooltip2 } disableHoverListener={!(transcription === '')} arrow>
-                <span>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      fontSize: '100%',
-                      borderRadius: '8px',
-                      height: '50px',
-                      bgcolor: 'black',
-                      '&:hover': { bgcolor: '#323232' },
-                      cursor: !lyricsVerified ? 'not-allowed' : 'pointer'
-                    }}
-                    fullWidth
-                    onClick={handleVerify}
-                    disabled={!lyricsVerified || transcription === ''}
-                  >
-                    {getTranslations().VerifyButton}
-                  </Button>
-                </span>
-              </Tooltip>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+                {t('Transcription')}
+              </Typography>
+              <TextareaAutosize
+                minRows={6}
+                placeholder={t('Description')}
+                style={{ width: '100%', padding: 16, border: '1px solid', borderRadius: 10, borderColor: '#DEDEDE', backgroundColor: 'white' }}
+                value={transcription}
+                onChange={(e) => {
+                  setTranscription(e.target.value);
+                  setLyricsVerified(true);
+                }}
+              />
+              <Box mt={2}>
+                <Tooltip title={t('Tooltip')} disableHoverListener={file} arrow>
+                  <span>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        fontSize: '100%',
+                        borderRadius: '8px',
+                        height: '50px',
+                        bgcolor: 'black',
+                        '&:hover': { bgcolor: '#323232' },
+                        cursor: loading ? 'not-allowed' : 'pointer'
+                      }}
+                      fullWidth
+                      onClick={transcribeFile}
+                      disabled={loading || !file}
+                    >
+                      {loading ? t('TranscribeButton2') : t('TranscribeButton')}
+                    </Button>
+                  </span>
+                </Tooltip>
+              </Box>
+              <Box mt={2}>
+                <Tooltip title={t('Tooltip2')} disableHoverListener={!(transcription === '')} arrow>
+                  <span>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        fontSize: '100%',
+                        borderRadius: '8px',
+                        height: '50px',
+                        bgcolor: 'black',
+                        '&:hover': { bgcolor: '#323232' },
+                        cursor: !lyricsVerified ? 'not-allowed' : 'pointer'
+                      }}
+                      fullWidth
+                      onClick={handleVerify}
+                      disabled={!lyricsVerified || transcription === ''}
+                    >
+                      {t('VerifyButton')}
+                    </Button>
+                  </span>
+                </Tooltip>
+              </Box>
             </Box>
-          </Box>
         </Box>
 
       </Paper>
