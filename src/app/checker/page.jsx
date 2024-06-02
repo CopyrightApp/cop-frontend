@@ -9,6 +9,8 @@ import { handleTranscribe } from '../functionsApi/api';
 import './styles.css';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
+import ModalRes from '../components/modalRes';
+
 import { useTranslation } from 'react-i18next'; 
 
 function Checker() {
@@ -18,8 +20,10 @@ function Checker() {
   const [fileUploaded, setFileUploaded] = useState(false);
   const [transcribed, setTranscribed] = useState(false);
   const [lyricsVerified, setLyricsVerified] = useState(false);
-  const [lyricCheck, setLyricCheck] = useState("");
+  const [lyricCheck, setLyricCheck] = useState("Plagio y es: sdadadsadasdasdadsadas");
   const { t } = useTranslation();
+  const [showModal, setShowModal] = useState(false);
+  
   const router = useRouter();
 
   const handleFileChange = (event) => {
@@ -52,22 +56,32 @@ function Checker() {
 
 
   const handleVerify = async () => {
+    setShowModal(true);
+    setLoading(true); 
     try {
       const response = await fetch('http://localhost:4000/check', {
         method: 'POST',
-        body: transcription,
+        body: JSON.stringify({ transcription }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
       if (response.ok) {
-        const data = await response.json()
+        const data = await response.json();
         setLyricCheck(data.text);
       } else {
-        console.error('Error al recibir la letra')
+        console.error('Error al recibir la letra');
       }
-
     } catch (error) {
-      console.log('Error de red:', error)
+      console.log('Error de red:', error);
     }
+
+    setLoading(false);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -163,7 +177,14 @@ function Checker() {
               </Box>
             </Box>
         </Box>
-
+        {showModal && (
+            <ModalRes
+              open={showModal}
+              loading={loading}
+              result={lyricCheck}
+              onClose={handleCloseModal}
+            />
+        )}
       </Paper>
 
     </Container>
