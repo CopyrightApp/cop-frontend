@@ -69,7 +69,7 @@ function Checker() {
 
       if (response.ok) {
         const data = await response.json();
-        setLyricCheck(data.content);
+        setLyricCheck(data.choices[0].message.content);
       } else {
         console.error('Error al recibir la letra');
       }
