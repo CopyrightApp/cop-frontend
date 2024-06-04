@@ -1,5 +1,6 @@
 import "./globals.css";
 import  { AppWrapper }  from "./context/index.jsx";
+import Navbar from './components/navbar';
 
 export const metadata = {
   title: "Lyric Checker",

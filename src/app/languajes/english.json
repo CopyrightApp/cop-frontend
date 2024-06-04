@@ -28,11 +28,20 @@
     "SignInToYourAccount": "Sign in to your account",
     "YourEmail": "Your email",
     "Password": "Password",
+    "ConfirmPassword": "Confirm password", 
     "RememberMe": "Remember me",
     "ForgotPassword": "Forgot password?",
     "ContinueWithGoogle": "Continue with Google",
     "ContinueWithGithub": "Continue with Github",
     "DontHaveAnAccount": "Don’t have an account yet?",
     "RegisterHere": "Register here",
-    "SignIn": "Sign in"
+    "SignIn": "Sign in",
+    "CreateAccount": "Create an account",
+    "TermsAndConditions": "I accept the terms and conditions",
+    "PasswordMatch": "Passwords do not match",
+    "UserExists": "User already exists",
+    "RegisterMessage": "The user has been successfully registered",
+    "LoginEmptyFields": "All fields are required for logging in",
+    "InvalidInfoLogin": "Invalid email or password",
+    "ServerErrorLogin": "An unexpected error occurred, please try again later"
 }

@@ -28,11 +28,20 @@
     "SignInToYourAccount": "Inicia sesión en tu cuenta",
     "YourEmail": "Tu correo electrónico",
     "Password": "Contraseña",
+    "ConfirmPassword": "Confirma tu contraseña",
     "RememberMe": "Recordarme",
     "ForgotPassword": "¿Olvidaste tu contraseña?",
     "ContinueWithGoogle": "Continuar con Google",
     "ContinueWithGithub": "Continuar con Github",
     "DontHaveAnAccount": "¿No tienes una cuenta aún?",
     "RegisterHere": "Regístrate aquí",
-    "SignIn": "Iniciar sesión"
+    "SignIn": "Iniciar sesión",
+    "CreateAccount": "Crear una cuenta",
+    "TermsAndConditions": "Acepto los términos y condiciones",
+    "PasswordMatch": "Las contraseñas no coinciden",
+    "UserExists": "El usuario ya se encuentra registrado",
+    "RegisterMessage": "El usuario se ha registrado correctamente",
+    "LoginEmptyFields": "Llena todos los campos para poder ingresar",
+    "InvalidInfoLogin": "Email o contraseña incorrectos",
+    "ServerErrorLogin": "Ocurrió un error inesperado, inténtalo más tarde"
     }
