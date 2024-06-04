@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip } from '@mui/material';
+import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress  } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/navigation';
@@ -59,7 +59,7 @@ function Checker() {
     setShowModal(true);
     setLoading(true); 
     try {
-      const response = await fetch('http://localhost:4000/check', {
+      const response = await fetch('http://localhost:4000/verify/check', {
         method: 'POST',
         body: JSON.stringify({ transcription }),
         headers: {
@@ -69,7 +69,7 @@ function Checker() {
 
       if (response.ok) {
         const data = await response.json();
-        setLyricCheck(data.text);
+        setLyricCheck(data.choices[0].message.content);
       } else {
         console.error('Error al recibir la letra');
       }
@@ -88,8 +88,8 @@ function Checker() {
     <>
       <Navbar />
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
-        <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper' }}>
-          <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+        <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt:'50px' }}>
+          <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display:'flex', justifyContent:'center', alignItems:'center' }}>
             {t('Title')}
           </Typography>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
@@ -104,7 +104,7 @@ function Checker() {
                     <Button onClick={handleDeleteFile} variant="outlined" startIcon={<DeleteIcon />}>{t('DeleteButton')}</Button>
                   </Box>
                 ) : (
-                  <label htmlFor="audio-upload" style={{ textAlign: 'center', cursor: 'pointer', width: '100%', height: '100%' }}>
+                  <label htmlFor="audio-upload" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', cursor: 'pointer', width: '100%', height: '100%' }}>
                     <UploadIcon fontSize="large" sx={{ color: 'grey.500' }} />
                     <Typography variant="body2" color="textSecondary">
                       <span style={{ fontWeight: 'bold' }}>{t('ClickToUpload')}</span> {t('OrDragAudio')}
@@ -189,6 +189,12 @@ function Checker() {
 
     </Container>
     <Footer />
+    {loading && (
+        <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress sx={{color:'white'}} />
+          <Typography variant="h6" sx={{ ml: 2, color:'white' }}>{t('TranscribeButton2')}</Typography>
+        </Box>
+      )}
     </>
   );
 }
