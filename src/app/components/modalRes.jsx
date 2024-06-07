@@ -42,6 +42,8 @@ const ModalRes = ({ open, loading, result, onClose }) => {
   const [openPart2, setOpenPart2] = useState(false);
   const [openPart3, setOpenPart3] = useState(false);
 
+  const result1 = "Esta letra ya existe o es similar a De musica ligera by Soda Stereo. *Opcion 1: Podrias cambiar el primer verso a De aquel amor, de musica sincera. Esto le daria un giro distinto a la letra original. *Opcion 2: Podrias agregar algun detalle mas descriptivo en el segundo verso, por ejemplo Nada nos libra, solo la hoguera. Esto aniadiria un elemento visual interesante a la letra."
+
   const splitResult = (text) => {
     const parts = text.split('*');
     const part1 = parts[0].trim();
@@ -50,7 +52,7 @@ const ModalRes = ({ open, loading, result, onClose }) => {
     return { part1, part2, part3 };
   };
 
-  const { part1, part2, part3 } = splitResult(result);
+  const { part1, part2, part3 } = splitResult(result1);
 
   const handleSecondaryOpen = () => {
     setOpenPart2(true);

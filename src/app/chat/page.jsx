@@ -1,13 +1,17 @@
 'use client';
-import React, { useState } from 'react';
-import { Box, Button, Container, TextareaAutosize, Paper } from '@mui/material';
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Button, Container, TextareaAutosize, Paper, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Message from '../components/message';
-import './styles.css'
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
+import './styles.css';
 
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const userInput = () => {
     if (!message.trim()) return;
@@ -15,30 +19,52 @@ const Chat = () => {
     setMessages([...messages, { role: 'user', content: message }]);
     setMessage('');
 
-      const simulate = "holaa"
-      setMessages([...messages, { role: 'user', content: message }, { role: 'bot', content: simulate }]);
+    const simulate = "holaaholaaholaaholaaholaaholaaholaaholaaholaaholaaholaaholaaholaahaholaaholaaholaaholaholaasdsdsddasasdads";
+    setMessages([...messages, { role: 'user', content: message }, { role: 'bot', content: simulate }]);
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      userInput();
+    }
   };
 
   return (
-    <div className="chat-container">
-      <Container maxWidth="md" style={{ marginTop: '1rem', maxHeight: '60vh', overflowY: 'auto' }}>
-        {messages.map((message, index) => (
-          <Message key={index} msg={message} />
-        ))}
-      </Container>
-      <Container maxWidth="md" style={{ marginTop: '1rem', padding: '1rem', display: 'flex', alignItems: 'center' }}>
-        <TextareaAutosize
-          minRows={3}
-          placeholder="¿Qué quieres preguntar acerca de tu letra?"
-          style={{ width: '80%', marginRight: '1rem' }}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button variant="contained" color="primary" onClick={userInput} endIcon={<SendIcon />}>
-          Enviar
-        </Button>
-      </Container>
-    </div>
+    <>
+      <Navbar />
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Container maxWidth="md" style={{ padding: '1rem', flex: 1, marginTop: '5rem', position: 'relative', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+          {messages.map((message, index) => (
+            <Message key={index} msg={message} />
+          ))}
+          <div ref={messagesEndRef} />
+        </Container>
+        <Container maxWidth="md" style={{ padding: '1rem', display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+          <TextareaAutosize
+            minRows={1}
+            maxRows={6}
+            placeholder="Â¿QuÃ© quieres preguntar acerca de tu letra?"
+            style={{ width: '100%', marginRight: '0.1rem', color: 'white', backgroundColor: 'black', padding: '0.7rem', border: '1px solid', borderRadius: '30px', borderColor: '#DEDEDE' }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <IconButton sx={{color:'white', display:'flex', justifyContent:'center', alignItems:'center', borderRadius:'50%',minWidth:0,height:'2.8rem',width:'2.8rem',bgcolor:'black','&:hover':{bgcolor:'#323232'}}} onClick={userInput}>
+            <SendIcon sx={{ fontSize: '1.5rem', marginLeft:'0.2rem',}} />
+          </IconButton>
+        </Container>
+        <Footer />
+      </div>
+    </>
   );
 };
 
