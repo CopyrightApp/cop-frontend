@@ -98,7 +98,7 @@ function Login() {
 
     return (
         <>
-            <Navbar />
+            <Navbar component={false}/>
             <section >
                 <div className="grid grid-cols-12 gap-4">
                     <div className="w-full col-span-5 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">

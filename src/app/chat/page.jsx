@@ -1,26 +1,58 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Button, Container, TextareaAutosize, Paper, IconButton } from '@mui/material';
+import { Container, TextareaAutosize, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Message from '../components/message';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
+import withAuth from '../utils/withAuth';
+import { useAppContext } from '../context/index';
+
 import './styles.css';
 
 const Chat = () => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{role: 'bot', content: '¡Hola! ¿Qué más quieres indagar sobre la sugerencia que te di? '}]);
+  const [song, setSong] = useState('');
+  const [lyrics, setLyrics] = useState('');
   const messagesEndRef = useRef(null);
-  const textareaRef = useRef(null);
+  const { suggestion, setSuggestion } = useAppContext();
 
-  const userInput = () => {
+  useEffect(() => {
+    const storedSuggestion = localStorage.getItem('suggestion');
+    const storedLyric = localStorage.getItem('lyric');
+    const storedSong = localStorage.getItem('song');
+    if (storedSuggestion && storedLyric && storedSong) {
+      setSuggestion(storedSuggestion);
+      setLyrics(storedLyric);
+      setSong(storedSong);
+    }
+  }, [setSuggestion]);
+
+  const userInput = async () => {
     if (!message.trim()) return;
 
     setMessages([...messages, { role: 'user', content: message }]);
     setMessage('');
 
-    const simulate = "holaaholaaholaaholaaholaaholaaholaaholaaholaaholaaholaaholaaholaahaholaaholaaholaaholaholaasdsdsddasasdads";
-    setMessages([...messages, { role: 'user', content: message }, { role: 'bot', content: simulate }]);
+    try {
+      const response = await fetch('http://localhost:4000/chat/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message, suggestion, song, lyrics}),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener la respuesta');
+      }
+
+      const responseData = await response.json();
+      setMessages([...messages, { role: 'user', content: message }, { role: 'bot', content: responseData.choices[0].message.content }]);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const scrollToBottom = () => {
@@ -40,7 +72,7 @@ const Chat = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar component={true}/>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Container maxWidth="md" style={{ padding: '1rem', flex: 1, marginTop: '5rem', position: 'relative', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
           {messages.map((message, index) => (
@@ -68,4 +100,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default withAuth(Chat);

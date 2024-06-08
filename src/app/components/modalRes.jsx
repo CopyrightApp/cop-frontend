@@ -1,5 +1,7 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useAppContext } from '../context/index';
 
 const style = {
   position: 'absolute',
@@ -22,6 +24,7 @@ const secondaryContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  justifyContent:'center',
   gap: '20px',
 };
 
@@ -32,19 +35,28 @@ const secondaryStyle = {
   boxShadow: 24,
   p: 4,
   color: 'black',
+  cursor: 'pointer',
 };
 
 const modalTitleStyle = {
   marginBottom: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
 const ModalRes = ({ open, loading, result, onClose }) => {
   const [openPart2, setOpenPart2] = useState(false);
   const [openPart3, setOpenPart3] = useState(false);
-
-  const result1 = "Esta letra ya existe o es similar a De musica ligera by Soda Stereo. *Opcion 1: Podrias cambiar el primer verso a De aquel amor, de musica sincera. Esto le daria un giro distinto a la letra original. *Opcion 2: Podrias agregar algun detalle mas descriptivo en el segundo verso, por ejemplo Nada nos libra, solo la hoguera. Esto aniadiria un elemento visual interesante a la letra."
+  const router = useRouter();
+  const { setSuggestion } = useAppContext();
+  const [splitResultData, setSplitResultData] = useState(null);
 
   const splitResult = (text) => {
+    const hasAsterisk = text.includes('*');
+    if (!hasAsterisk) {
+      return { part1: text, part2: '', part3: '' };
+    }
     const parts = text.split('*');
     const part1 = parts[0].trim();
     const part2 = parts[1].trim();
@@ -52,7 +64,12 @@ const ModalRes = ({ open, loading, result, onClose }) => {
     return { part1, part2, part3 };
   };
 
-  const { part1, part2, part3 } = splitResult(result1);
+  useEffect(() => {
+    if (result) {
+      const splitData = splitResult(result);
+      setSplitResultData(splitData);
+    }
+  }, [result]);
 
   const handleSecondaryOpen = () => {
     setOpenPart2(true);
@@ -62,6 +79,13 @@ const ModalRes = ({ open, loading, result, onClose }) => {
   const handleSecondaryClose = () => {
     setOpenPart2(false);
     setOpenPart3(false);
+  };
+
+  const handleModalClick = (text) => {
+    setSuggestion(text);
+    localStorage.setItem('suggestion', text);
+    localStorage.setItem('song', splitResultData.part1);
+    router.push('/chat');
   };
 
   return (
@@ -79,15 +103,21 @@ const ModalRes = ({ open, loading, result, onClose }) => {
             </Typography>
           ) : (
             <>
-              <Typography id="modal-modal-part1" variant="h6" component="p">
-                {part1}
-              </Typography>
-              <Typography variant="body1" component="p" sx={{ mt: 2 }}>
-                Si quieres sugerencias para el cambio de letra da click en{' '}
-                <Button onClick={handleSecondaryOpen} color="primary">
-                  recibir opciones
-                </Button>
-              </Typography>
+              {splitResultData && splitResultData.part1 && (
+                <div>
+                  <Typography id="modal-modal-part1" variant="h6" component="p">
+                    {splitResultData.part1}
+                  </Typography>
+                  {splitResultData.part2 || splitResultData.part3 ? (
+                    <Typography variant="body1" component="p" sx={{ mt: 2 }}>
+                      Si quieres sugerencias para el cambio de letra da click en{' '}
+                      <Button onClick={handleSecondaryOpen} color="primary">
+                        recibir opciones
+                      </Button>
+                    </Typography>
+                  ) : null}
+                </div>
+              )}
             </>
           )}
         </Box>
@@ -103,21 +133,30 @@ const ModalRes = ({ open, loading, result, onClose }) => {
             ¿Cuál opción prefieres para recibir más retroalimentación acerca de ella?
           </Typography>
           <Box sx={{ display: 'flex', gap: '20px' }}>
-            <Box sx={secondaryStyle}>
-              <Typography id="modal-part2-title" variant="h6" component="h2">
-                {part2}
-              </Typography>
-            </Box>
-            <Box sx={secondaryStyle}>
-              <Typography id="modal-part3-title" variant="h6" component="h2">
-                {part3}
-              </Typography>
-            </Box>
+            {splitResultData && (
+              <>
+                {splitResultData.part2 && (
+                  <Box sx={secondaryStyle} onClick={() => handleModalClick(splitResultData.part2)}> 
+                    <Typography id="modal-part2-title" variant="h6" component="h2">
+                      {splitResultData.part2}
+                    </Typography>
+                  </Box>
+                )}
+                {splitResultData.part3 && (
+                  <Box sx={secondaryStyle} onClick={() => handleModalClick(splitResultData.part3)}>
+                    <Typography id="modal-part3-title" variant="h6" component="h2">
+                      {splitResultData.part3}
+                    </Typography>
+                  </Box>
+                )}
+              </>
+            )}
           </Box>
         </Box>
       </Modal>
     </>
   );
 };
+
 
 export default ModalRes;

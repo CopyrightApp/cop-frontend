@@ -21,7 +21,7 @@ export default function Component() {
   
   return (
     <>
-      <Navbar />
+      <Navbar component={false}/>
       <React.Fragment>
         <Box sx={{ pt: 8, pb: 10 }}>
         <main>

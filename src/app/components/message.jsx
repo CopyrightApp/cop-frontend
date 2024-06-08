@@ -15,7 +15,6 @@ const Message = ({ msg }) => {
             color: isUser ? 'white' : 'black',
             borderRadius: '10px',
             padding: '1rem',
-            position: 'relative',
             maxWidth: '100%',
             wordBreak: 'break-word',
           }}

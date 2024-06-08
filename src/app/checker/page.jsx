@@ -20,7 +20,7 @@ function Checker() {
   const [fileUploaded, setFileUploaded] = useState(false);
   const [transcribed, setTranscribed] = useState(false);
   const [lyricsVerified, setLyricsVerified] = useState(false);
-  const [lyricCheck, setLyricCheck] = useState("Esta letra ya existe o es similar a De musica ligera by Soda Stereo. *Opcion 1: Podrias cambiar el primer verso a De aquel amor, de musica sincera. Esto le daria un giro distinto a la letra original. *Opcion 2: Podrias agregar algun detalle mas descriptivo en el segundo verso, por ejemplo Nada nos libra, solo la hoguera. Esto aniadiria un elemento visual interesante a la letra.");
+  const [lyricCheck, setLyricCheck] = useState("");
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   
@@ -57,7 +57,8 @@ function Checker() {
 
   const handleVerify = async () => {
     setShowModal(true);
-    setLoading(true); 
+    setLoading(true);
+    localStorage.setItem('lyric', transcription);
     try {
       const response = await fetch('http://localhost:4000/verify/check', {
         method: 'POST',
@@ -70,6 +71,7 @@ function Checker() {
       if (response.ok) {
         const data = await response.json();
         setLyricCheck(data.choices[0].message.content);
+        console.log(data.choices[0].message.content)
       } else {
         console.error('Error al recibir la letra');
       }
@@ -86,7 +88,7 @@ function Checker() {
 
   return (
     <>
-      <Navbar />
+      <Navbar component={false}/>
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
         <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt:'50px' }}>
           <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display:'flex', justifyContent:'center', alignItems:'center' }}>
@@ -123,6 +125,7 @@ function Checker() {
               </Typography>
               <TextareaAutosize
                 minRows={6}
+                maxRows={6}
                 placeholder={t('Description')}
                 style={{ width: '100%', padding: 16, border: '1px solid', borderRadius: 10, borderColor: '#DEDEDE', backgroundColor: 'white' }}
                 value={transcription}
