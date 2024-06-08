@@ -14,7 +14,7 @@ import { useAppContext } from "../context";
 
 const languages = ['English', 'Español', 'French', 'German', 'Chinese', 'Italian', 'Portuguese', 'Japanese'];
 
-function Navbar() {
+function Navbar({ component }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [anchorEl, setAnchorEl] = useState(null);
@@ -93,6 +93,15 @@ function Navbar() {
           </Link>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {component ? <Button 
+            variant="outlined"
+            onClick={() => window.location.href = '/checker'}
+            sx={{ color: '#ffffff', borderColor: '#ffffff', mr: 2, borderRadius: '20px', '&:hover': { borderColor: '#323232' } }} 
+          >
+            New Check
+          </Button>
+          : null
+          }
           <Button 
             variant="outlined" 
             sx={{ color: '#ffffff', borderColor: '#ffffff', mr: 2, borderRadius: '20px', '&:hover': { borderColor: '#323232' } }} 

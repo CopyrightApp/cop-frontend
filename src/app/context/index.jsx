@@ -5,7 +5,8 @@ import i18n from "../i18n";
 const Context = createContext();
 
 export function AppWrapper({ children }) {
-  const [language, setLanguage] = useState("English"); 
+  const [language, setLanguage] = useState("English");
+  const [suggestion, setSuggestion] = useState('');
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language");
@@ -22,7 +23,7 @@ export function AppWrapper({ children }) {
   }, [language]);
 
   return (
-    <Context.Provider value={{ language, setLanguage }}>
+    <Context.Provider value={{ language, setLanguage, suggestion, setSuggestion }}>
       {children}
     </Context.Provider>
   );
