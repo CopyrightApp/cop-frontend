@@ -53,6 +53,7 @@ const ModalRes = ({ open, loading, result, onClose }) => {
   const [splitResultData, setSplitResultData] = useState(null);
 
   const splitResult = (text) => {
+    console.log("text", text)
     const hasAsterisk = text.includes('*');
     if (!hasAsterisk) {
       return { part1: text, part2: '', part3: '' };

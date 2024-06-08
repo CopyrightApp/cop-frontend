@@ -7,16 +7,24 @@ import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import withAuth from '../utils/withAuth';
 import { useAppContext } from '../context/index';
+import { useTranslation } from 'react-i18next'; 
 
 import './styles.css';
 
 const Chat = () => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([{role: 'bot', content: '¡Hola! ¿Qué más quieres indagar sobre la sugerencia que te di? '}]);
+  const { t, i18n } = useTranslation();
+  const [messages, setMessages] = useState([]);
   const [song, setSong] = useState('');
   const [lyrics, setLyrics] = useState('');
   const messagesEndRef = useRef(null);
   const { suggestion, setSuggestion } = useAppContext();
+
+  useEffect(() => {
+    setMessages([{ role: 'bot', content: t('ChatFirstBot') }]);
+  }, [i18n.language]);
+
+
 
   useEffect(() => {
     const storedSuggestion = localStorage.getItem('suggestion');
@@ -84,7 +92,7 @@ const Chat = () => {
           <TextareaAutosize
             minRows={1}
             maxRows={6}
-            placeholder="¿Qué quieres preguntar acerca de tu letra?"
+            placeholder={t('ChatPlaceHolder')}
             style={{ width: '100%', marginRight: '0.1rem', color: 'white', backgroundColor: 'black', padding: '0.7rem', border: '1px solid', borderRadius: '30px', borderColor: '#DEDEDE' }}
             value={message}
             onChange={(e) => setMessage(e.target.value)}

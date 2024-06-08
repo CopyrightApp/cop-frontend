@@ -10,6 +10,7 @@ import './styles.css';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 import ModalRes from '../components/modalRes';
+import { useAppContext } from '../context/index';
 
 import { useTranslation } from 'react-i18next'; 
 
@@ -22,6 +23,7 @@ function Checker() {
   const [lyricsVerified, setLyricsVerified] = useState(false);
   const [lyricCheck, setLyricCheck] = useState("");
   const { t } = useTranslation();
+  const { language } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   
   const router = useRouter();
@@ -62,7 +64,7 @@ function Checker() {
     try {
       const response = await fetch('http://localhost:4000/verify/check', {
         method: 'POST',
-        body: JSON.stringify({ transcription }),
+        body: JSON.stringify({ transcription, language }),
         headers: {
           'Content-Type': 'application/json'
         }
@@ -70,8 +72,8 @@ function Checker() {
 
       if (response.ok) {
         const data = await response.json();
-        setLyricCheck(data.choices[0].message.content);
-        console.log(data.choices[0].message.content)
+        setLyricCheck(data);
+        console.log(data)
       } else {
         console.error('Error al recibir la letra');
       }

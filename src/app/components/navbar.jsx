@@ -23,6 +23,7 @@ function Navbar({ component }) {
   const { setLanguage } = useAppContext();
 
   const handleChangeLanguage = (newLanguage) => {
+    localStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
   };
 

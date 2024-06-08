@@ -43,5 +43,7 @@
     "RegisterMessage": "El usuario se ha registrado correctamente",
     "LoginEmptyFields": "Llena todos los campos para poder ingresar",
     "InvalidInfoLogin": "Email o contraseña incorrectos",
-    "ServerErrorLogin": "Ocurrió un error inesperado, inténtalo más tarde"
-    }
+    "ServerErrorLogin": "Ocurrió un error inesperado, inténtalo más tarde",
+    "ChatPlaceHolder": "¿Qué quieres preguntar acerca de tu letra?",
+    "ChatFirstBot": "¡Hola! ¿Qué más quieres indagar sobre la sugerencia que te di?"
+}
