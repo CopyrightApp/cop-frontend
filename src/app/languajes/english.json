@@ -45,5 +45,10 @@
     "InvalidInfoLogin": "Invalid email or password",
     "ServerErrorLogin": "An unexpected error occurred, please try again later",
     "ChatPlaceHolder": "What do you want to ask about your lyrics?",
-    "ChatFirstBot": "Hello! What else do you want to find out about the suggestion I gave you?"
+    "ChatFirstBot": "Hello! What else do you want to find out about the suggestion I gave you?",
+    "ModalRes": "Which option do you prefer to receive more feedback about it?",
+    "ModalSugg": "If you want suggestions for changing the letter, click",
+    "ModalButton": "Receive options",
+    "ModalWaiting": "Analyzing...",
+    "Tooltip3": "Only 60 seconds will be transcribed. It is recommended to choose the most memorable minute"
 }

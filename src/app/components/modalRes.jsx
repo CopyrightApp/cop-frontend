@@ -2,6 +2,7 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useAppContext } from '../context/index';
+import { useTranslation } from 'react-i18next';
 
 const style = {
   position: 'absolute',
@@ -48,6 +49,7 @@ const modalTitleStyle = {
 const ModalRes = ({ open, loading, result, onClose }) => {
   const [openPart2, setOpenPart2] = useState(false);
   const [openPart3, setOpenPart3] = useState(false);
+  const { t } = useTranslation();
   const router = useRouter();
   const { setSuggestion } = useAppContext();
   const [splitResultData, setSplitResultData] = useState(null);
@@ -100,7 +102,7 @@ const ModalRes = ({ open, loading, result, onClose }) => {
         <Box sx={style}>
           {loading ? (
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Esperando análisis...
+              {t('ModalWaiting')}
             </Typography>
           ) : (
             <>
@@ -111,9 +113,9 @@ const ModalRes = ({ open, loading, result, onClose }) => {
                   </Typography>
                   {splitResultData.part2 || splitResultData.part3 ? (
                     <Typography variant="body1" component="p" sx={{ mt: 2 }}>
-                      Si quieres sugerencias para el cambio de letra da click en{' '}
+                      {t('ModalSugg')}{' '}
                       <Button onClick={handleSecondaryOpen} color="primary">
-                        recibir opciones
+                      {t('ModalButton')}
                       </Button>
                     </Typography>
                   ) : null}
@@ -131,25 +133,25 @@ const ModalRes = ({ open, loading, result, onClose }) => {
       >
         <Box sx={secondaryContainerStyle}>
           <Typography variant="h6" component="p" sx={modalTitleStyle}>
-            ¿Cuál opción prefieres para recibir más retroalimentación acerca de ella?
+          {t('ModalRes')}
           </Typography>
           <Box sx={{ display: 'flex', gap: '20px' }}>
             {splitResultData && (
               <>
-                {splitResultData.part2 && (
+                {splitResultData.part2 ? (
                   <Box sx={secondaryStyle} onClick={() => handleModalClick(splitResultData.part2)}> 
                     <Typography id="modal-part2-title" variant="h6" component="h2">
                       {splitResultData.part2}
                     </Typography>
                   </Box>
-                )}
-                {splitResultData.part3 && (
+                ): null}
+                {splitResultData.part3 ? (
                   <Box sx={secondaryStyle} onClick={() => handleModalClick(splitResultData.part3)}>
                     <Typography id="modal-part3-title" variant="h6" component="h2">
                       {splitResultData.part3}
                     </Typography>
                   </Box>
-                )}
+                ): null}
               </>
             )}
           </Box>

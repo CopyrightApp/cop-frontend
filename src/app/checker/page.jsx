@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress  } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'; // Import the help icon
 import { useRouter } from 'next/navigation';
 import withAuth from '../utils/withAuth';
 import { handleTranscribe } from '../functionsApi/api';
@@ -72,8 +73,8 @@ function Checker() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setLyricCheck(data);
-        console.log(data)
       } else {
         console.error('Error al recibir la letra');
       }
@@ -98,8 +99,11 @@ function Checker() {
           </Typography>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
             <Box mt={2}>
-              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
                 {t('UploadAudio')}
+                <Tooltip title={t('Tooltip3')} arrow>
+                  <HelpOutlineIcon sx={{ ml: 1, cursor: 'pointer' }} />
+                </Tooltip>
               </Typography>
               <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
                 {fileUploaded ? (

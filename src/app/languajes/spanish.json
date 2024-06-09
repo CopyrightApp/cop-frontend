@@ -45,5 +45,10 @@
     "InvalidInfoLogin": "Email o contraseña incorrectos",
     "ServerErrorLogin": "Ocurrió un error inesperado, inténtalo más tarde",
     "ChatPlaceHolder": "¿Qué quieres preguntar acerca de tu letra?",
-    "ChatFirstBot": "¡Hola! ¿Qué más quieres indagar sobre la sugerencia que te di?"
+    "ChatFirstBot": "¡Hola! ¿Qué más quieres indagar sobre la sugerencia que te di?",
+    "ModalRes": "¿Cuál opción prefieres para recibir más retroalimentación acerca de ella?",
+    "ModalSugg": "Si quieres sugerencias para el cambio de letra da click en",
+    "ModalButton": "Recibir opciones",
+    "ModalWaiting": "Analizando...",
+    "Tooltip3": "Sólo se transcribirán 60 segundos. Se recomienda escoger el minuto más memorable"
 }
