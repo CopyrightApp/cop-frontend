@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress  } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress, MenuItem, Select, FormControl, InputLabel  } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/navigation';
@@ -23,7 +23,31 @@ function Checker() {
   const [lyricCheck, setLyricCheck] = useState("");
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
-  
+  const [selectedLanguage, setSelectedLanguage] = useState('ingles');
+
+  const languages = {
+    "espanol":{
+      "codigo": "es-US",
+      "model": "latest_long"
+    },
+    "ingles":{
+      "codigo": "en-US",
+      "model": "latest_long"
+    },
+    "frances":{
+      "codigo": "fr-FR",
+      "model": "latest_long"
+    },
+    "italiano":{
+      "codigo": "it-IT",
+      "model": "latest_long"
+    },
+    "aleman":{
+      "codigo": "de-DE",
+      "model": "latest_long"
+    }
+  }
+
   const router = useRouter();
 
   const handleFileChange = (event) => {
@@ -33,7 +57,7 @@ function Checker() {
 
   const transcribeFile = async () => {
     setLoading(true);
-    const result = await handleTranscribe(file);
+    const result = await handleTranscribe(file, languages[selectedLanguage]);
 
     if (result.success) {
       setTranscription(result.transcription);
@@ -86,6 +110,10 @@ function Checker() {
     setShowModal(false);
   };
 
+  const handleLanguageChange = (event) => {
+    setSelectedLanguage(event.target.value);
+  };
+
   return (
     <>
       <Navbar component={false}/>
@@ -118,6 +146,24 @@ function Checker() {
                   </label>
                 )}
               </Box>
+              <Box mt={2}>
+                <FormControl fullWidth>
+                  <InputLabel id="language-select-label">{t('Language')}</InputLabel>
+                  <Select
+                    labelId="language-select-label"
+                    id="language-select"
+                    value={selectedLanguage}
+                    label={t('Language')}
+                    onChange={handleLanguageChange}
+                  >
+                    <MenuItem value="aleman">{t('Alemán')}</MenuItem>
+                    <MenuItem value="espanol">{t('Español')}</MenuItem>
+                    <MenuItem value="frances">{t('Francés')}</MenuItem>
+                    <MenuItem value="ingles">{t('Inglés')}</MenuItem>
+                    <MenuItem value="italiano">{t('Italiano')}</MenuItem>
+                  </Select>
+                </FormControl>
+            </Box>
             </Box>
             <Box mt={2}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -134,6 +180,7 @@ function Checker() {
                   setLyricsVerified(true);
                 }}
               />
+
               <Box mt={2}>
                 <Tooltip title={t('Tooltip')} disableHoverListener={file} arrow>
                   <span>
