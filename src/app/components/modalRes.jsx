@@ -86,6 +86,7 @@ const ModalRes = ({ open, loading, result, onClose }) => {
 
   const handleModalClick = (text) => {
     setSuggestion(text);
+    localStorage.setItem('change', true);
     localStorage.setItem('suggestion', text);
     localStorage.setItem('song', splitResultData.part1);
     router.push('/chat');

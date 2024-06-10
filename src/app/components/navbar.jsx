@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Box, Typography, useTheme, useMediaQuery, IconButton, Divider, Button, Menu, MenuItem, Modal, List, ListItem, ListItemButton } from '@mui/material';
 import LyricsIcon from '@mui/icons-material/Lyrics';
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
@@ -21,6 +21,8 @@ function Navbar({ component }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { setLanguage } = useAppContext();
+
+  const chat = localStorage.getItem('getin');
 
   const handleChangeLanguage = (newLanguage) => {
     localStorage.setItem('language', newLanguage);
@@ -94,6 +96,15 @@ function Navbar({ component }) {
           </Link>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {chat ? <Button
+            variant="outlined"
+            onClick={() => window.location.href = '/chat'}
+            sx={{ color: '#ffffff', borderColor: '#ffffff', mr: 2, borderRadius: '20px', '&:hover': { borderColor: '#323232' } }}
+          >
+            Chat
+          </Button>
+          : null
+          }
           {component ? <Button 
             variant="outlined"
             onClick={() => window.location.href = '/checker'}

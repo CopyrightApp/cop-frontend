@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress  } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'; // Import the help icon
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useRouter } from 'next/navigation';
 import withAuth from '../utils/withAuth';
 import { handleTranscribe } from '../functionsApi/api';
