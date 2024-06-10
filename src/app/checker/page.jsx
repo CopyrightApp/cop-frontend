@@ -185,6 +185,7 @@ function Checker() {
                 <Tooltip title={t('Tooltip')} disableHoverListener={file} arrow>
                   <span>
                     <Button
+                      data-testid="transcribe-button"
                       variant="contained"
                       sx={{
                         fontSize: '100%',
