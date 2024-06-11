@@ -11,6 +11,7 @@ import Link from 'next/link';
 import './styles.css';
 import { getSession, useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { useTranslation } from 'react-i18next';
 
 
 import { useAppContext } from "../context";
@@ -29,6 +30,7 @@ function Navbar({ component }) {
   const { data: session, status } = useSession(); // Hook de NextAuth.js
   const [chat, setChat] = useState(false);
   const [image, setImage] = useState();
+  const { t } = useTranslation();
 
   const handleChangeLanguage = (newLanguage) => {
     localStorage.setItem('language', newLanguage);
@@ -276,16 +278,16 @@ function Navbar({ component }) {
           }}
         >
           <Typography color='black' fontWeight='bold' id="feedback-modal-title" variant="h6" component="h2" gutterBottom >
-            Dejar Retroalimentación
+            {t('Feedback')}
           </Typography>
           <Typography id="feedback-modal-description" sx={{ mt: 2, color:'black' }}>
-            Nos encantaría saber qué salió bien o cómo podemos mejorar la experiencia del producto.
+            {t('FeedbackTitle')}
           </Typography>
           <TextareaAutosize
             aria-label="feedback textarea"
             minRows={5}
             maxRows={5}
-            placeholder="Escribe tu retroalimentación aquí..."
+            placeholder={t('FeedbackPlaceholder')}
             style={{ padding:'1rem', width: '100%', marginTop: '16px', borderRadius:'10px' }}
             onChange={(e) => {
               setFeedback(e.target.value);
@@ -296,7 +298,7 @@ function Navbar({ component }) {
             sx={{ mt: 2, bgcolor:'black', width: '100%', '&:hover': { bgcolor: '#323232' } }} 
             onClick={handleFeedbackModalClose}
           >
-            Submit
+            {t('FeedbackSubmit')}
           </Button>
         </Box>
       </Modal>

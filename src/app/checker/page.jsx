@@ -328,23 +328,23 @@ function Checker() {
               </Box>
               <Box mt={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                 <FormControl fullWidth>
-                  <InputLabel id="language-select-label">Language</InputLabel>
+                  <InputLabel id="language-select-label">{t('InputLabel')}</InputLabel>
                   <Select
                     labelId="language-select-label"
                     id="language-select"
                     value={selectedLanguage}
-                    label='Language'
+                    label={t('InputLabel')}
                     onChange={handleLanguageChange}
                     MenuProps={{
                       PaperProps: { style: { maxHeight: '15%', borderColor:'black',  } }
                     }}
                   >
-                    <MenuItem value="aleman">German</MenuItem>
-                    <MenuItem value="espanol">Español</MenuItem>
-                    <MenuItem value="frances">French</MenuItem>
-                    <MenuItem value="ingles">English</MenuItem>
-                    <MenuItem value="italiano">Italian</MenuItem>
-                    <MenuItem value="portugues">Portuguese</MenuItem>
+                    <MenuItem value="aleman">{t('Germian')}</MenuItem>
+                    <MenuItem value="espanol">{t('Spanish')}</MenuItem>
+                    <MenuItem value="frances">{t('French')}</MenuItem>
+                    <MenuItem value="ingles">{t('English')}</MenuItem>
+                    <MenuItem value="italiano">{t('Italian')}</MenuItem>
+                    <MenuItem value="portugues">{t('Portuguese')}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
