@@ -4,11 +4,20 @@ import { initReactI18next } from "react-i18next";
 import english from "./languajes/english.json";
 import spanish from "./languajes/spanish.json";
 
+const getDefaultLanguage = () => {
+  if (typeof localStorage !== "undefined") {
+    return localStorage.getItem("language") || "English";
+  }
+  return "English";
+};
+
+const defaultLanguage = getDefaultLanguage();
+
 i18n
   .use(initReactI18next)
   .init({
-    lng: "English",
-    fallbackLng: "English",
+    lng: defaultLanguage,
+    fallbackLng: defaultLanguage,
     debug: true,
     resources: {
       English: {
