@@ -1,6 +1,6 @@
 'use client';
-import React, { use, useEffect, useState } from 'react';
-import { Box, Typography, useTheme, useMediaQuery, IconButton, Divider, Button, Menu, MenuItem, Modal, List, ListItem, ListItemButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, useTheme, useMediaQuery, IconButton, Divider, Button, Menu, MenuItem, Modal, List, ListItem, ListItemButton, TextareaAutosize } from '@mui/material';
 import LyricsIcon from '@mui/icons-material/Lyrics';
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 import LoginIcon from '@mui/icons-material/Login';
@@ -20,6 +20,8 @@ function Navbar({ component }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState('');
   const { setLanguage } = useAppContext();
 
   const chat = localStorage.getItem('getin');
@@ -50,6 +52,33 @@ function Navbar({ component }) {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleFeedbackModalOpen = () => {
+    setIsFeedbackModalOpen(true);
+  };
+
+  const handleFeedbackModalClose = async () => {
+    console.log("feedback", feedback)
+    try {
+      const response = await fetch('http://localhost:4000/feedback/noti', {
+        method: 'POST',
+        body: JSON.stringify({ feedback }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("feed", data);
+      } else {
+        console.error('Error al recibir el feedback');
+      }
+    } catch (error) {
+      console.log('Error de red:', error);
+    }
+    setIsFeedbackModalOpen(false);
   };
 
   useEffect(() => {
@@ -117,6 +146,7 @@ function Navbar({ component }) {
           <Button 
             variant="outlined" 
             sx={{ color: '#ffffff', borderColor: '#ffffff', mr: 2, borderRadius: '20px', '&:hover': { borderColor: '#323232' } }} 
+            onClick={handleFeedbackModalOpen} // Agrega el evento onClick
           >
             Feedback
           </Button>
@@ -175,10 +205,11 @@ function Navbar({ component }) {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 400,
-            bgcolor: '#F1F1F1',
+            bgcolor: 'white',
             border: '2px solid #000',
             boxShadow: 24,
             p: 4,
+            borderRadius:'15px'
           }}
         >
           <Typography color='black' fontWeight='bold' id="modal-modal-title" variant="h6" component="h2" gutterBottom >
@@ -194,6 +225,57 @@ function Navbar({ component }) {
               </ListItem>
             ))}
           </List>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={isFeedbackModalOpen}
+        onClose={handleFeedbackModalClose}
+        aria-labelledby="feedback-modal-title"
+        aria-describedby="feedback-modal-description"
+      >
+        <Box 
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'white',
+            border: '2px solid #000',
+            boxShadow: 24,
+            borderRadius: '15px',
+            p: 4,
+            alignItems:'center',
+            justifyContent:'center',
+            display:'flex',
+            flexDirection:'column',
+            color:'black'
+          }}
+        >
+          <Typography color='black' fontWeight='bold' id="feedback-modal-title" variant="h6" component="h2" gutterBottom >
+            Dejar Retroalimentación
+          </Typography>
+          <Typography id="feedback-modal-description" sx={{ mt: 2, color:'black' }}>
+            Nos encantaría saber qué salió bien o cómo podemos mejorar la experiencia del producto.
+          </Typography>
+          <TextareaAutosize
+            aria-label="feedback textarea"
+            minRows={5}
+            maxRows={5}
+            placeholder="Escribe tu retroalimentación aquí..."
+            style={{ padding:'1rem', width: '100%', marginTop: '16px', borderRadius:'10px' }}
+            onChange={(e) => {
+              setFeedback(e.target.value);
+            }}
+          />
+          <Button 
+            variant="contained" 
+            sx={{ mt: 2, bgcolor:'black', width: '100%', '&:hover': { bgcolor: '#323232' } }} 
+            onClick={handleFeedbackModalClose}
+          >
+            Submit
+          </Button>
         </Box>
       </Modal>
     </>

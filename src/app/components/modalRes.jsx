@@ -15,6 +15,7 @@ const style = {
   boxShadow: 24,
   p: 4,
   color: 'black',
+  borderRadius:'15px'
 };
 
 const secondaryContainerStyle = {
@@ -27,6 +28,7 @@ const secondaryContainerStyle = {
   alignItems: 'center',
   justifyContent:'center',
   gap: '20px',
+  borderRadius:'15px'
 };
 
 const secondaryStyle = {
@@ -37,6 +39,7 @@ const secondaryStyle = {
   p: 4,
   color: 'black',
   cursor: 'pointer',
+  borderRadius:'15px'
 };
 
 const modalTitleStyle = {
