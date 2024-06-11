@@ -1,9 +1,18 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress, MenuItem, Select, FormControl, InputLabel  } from '@mui/material';
+import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress,  MenuItem, Select, FormControl, InputLabel, IconButton, Alert, Modal, Divider } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import Slide from '@mui/material/Slide';
+import Cookies from 'js-cookie';
+
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import StarIcon from '@mui/icons-material/Star';
+import PersonIcon from '@mui/icons-material/Person';
+import { StarBorder } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import withAuth from '../utils/withAuth';
 import { handleTranscribe } from '../functionsApi/api';
@@ -12,6 +21,12 @@ import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 import ModalRes from '../components/modalRes';
 import { useAppContext } from '../context/index';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
 
 import { useTranslation } from 'react-i18next';
 
@@ -53,9 +68,41 @@ function Checker() {
       "model": "latest_long"
     }
   }
+  const [showModalFavorites, setShowModalFavorites] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [showSnack, setShowSnack] = useState(false)
+  const [history, setHistory] = useState([])
   const router = useRouter();
   const searchParams = useSearchParams()
+
+  function SlideTransition(props) {
+    return <Slide {...props} direction="up" />;
+  }
+
+  const formatTimestampTo12Hour = (timestamp) => {
+    const date = new Date(timestamp);
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Los meses son 0-indexados
+    const year = date.getFullYear();
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+
+    return `${formattedDate} ${formattedTime}`;
+  };
+
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -124,6 +171,7 @@ function Checker() {
   useEffect(() => {
     const image = searchParams.get('image')
     if (image) {
+      setProfileImageUrl(image)
       localStorage.setItem('image', image)
       const currentUrl = window.location.toString();
       const baseUrl = currentUrl.split('?')[0];
@@ -131,9 +179,121 @@ function Checker() {
     }
   }, []);
 
+
+  const handleSaveFavorite = async () => {
+    if (transcription) {
+      setIsFavorite(true)
+      setShowSnack(true)
+      try {
+        var token = ""
+        if (Cookies.get('jwtToken')) {
+          token = Cookies.get('jwtToken')
+        } else {
+          //En la validación de github entraría en este condicional.
+          token = ""
+        }
+        const response = await fetch('http://localhost:4000/history', {
+          method: 'POST',
+          body: JSON.stringify({ details: transcription }),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data)
+        } else {
+          console.error('Error al agregar elemento al historial');
+        }
+      } catch (error) {
+        console.log('Error de red:', error);
+      }
+      setTimeout(() => {
+        setShowSnack(false);
+      }, 1700);
+    }
+  }
+  const handleFavoritesList = async () => {
+    try {
+      var token = ""
+      if (Cookies.get('jwtToken')) {
+        token = Cookies.get('jwtToken')
+      } else {
+        //En la validación de github entraría en este condicional.
+        token = ""
+      }
+      const response = await fetch('http://localhost:4000/history', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setHistory(data.history)
+        console.log("El historial es ", data.history)
+      } else {
+        console.error('Error al recibir el historial');
+      }
+    } catch (error) {
+      console.log('Error de red:', error);
+    }
+    setShowModalFavorites(true)
+  }
+
+  const handleCloseFavoritesList = () => {
+    setShowModalFavorites(false)
+  }
+
+
+  useEffect(() => {
+    if (isFavorite) {
+      setIsFavorite(false)
+    }
+    if (showSnack) {
+      setShowSnack(false)
+    }
+  }, [transcription])
+
   return (
     <>
-      <Navbar component={false} />
+      <Modal
+        open={showModalFavorites}
+        onClose={handleCloseFavoritesList}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 600,
+          height: 500,
+          bgcolor: 'white',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {t("FavoritesButton")}
+          </Typography>
+          <List sx={{ maxHeight: 400, overflow: 'auto' }}>
+            {history.map((item) => (
+              <><ListItem>
+                <ListItemAvatar>
+                  {profileImageUrl ? <Avatar alt="Remy Sharp" src={profileImageUrl} /> : (<PersonIcon />)}
+                </ListItemAvatar>
+                <ListItemText primary={item.details} secondary={formatTimestampTo12Hour(item.timestamp)} />
+              </ListItem><Divider /></>
+            ))}
+          </List>
+        </Box>
+      </Modal>
+      <Navbar component={false} image={profileImageUrl} />
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
         <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt: '50px' }}>
           <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -190,8 +350,19 @@ function Checker() {
               </Box>
             </Box>
             <Box mt={2}>
-              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', padding: 0 }}>
                 {t('Transcription')}
+                <IconButton onClick={handleSaveFavorite} aria-label="delete" sx={{ color: '#e9d700', width: 60, height: 60, padding: 0, marginLeft: 2, marginBottom: 1 }}>
+                  {isFavorite ? <StarIcon sx={{ width: '60%', height: '60%' }} /> :
+                    <StarBorder sx={{ width: '60%', height: '60%' }}
+                    />
+                  }
+                </IconButton>
+                {showSnack && <Snackbar open={open} TransitionComponent={SlideTransition} autoHideDuration={6000} sx={{ marginBottom: 6 }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                  <Alert icon={<StarIcon sx={{ color: 'black' }} />} sx={{ backgroundColor: '#e9d700', color: 'black', textDecorationColor: 'white' }} severity="success">
+                    {t("FavoritesAlert")}
+                  </Alert>
+                </Snackbar>}
               </Typography>
               <TextareaAutosize
                 minRows={6}
@@ -249,6 +420,25 @@ function Checker() {
                     </Button>
                   </span>
                 </Tooltip>
+              </Box><Box mt={2}>
+                <Tooltip title={t('Tooltip4')} disableHoverListener={!(transcription === '')} arrow>
+                  <span>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        fontSize: '100%',
+                        borderRadius: '8px',
+                        height: '50px',
+                        bgcolor: 'black',
+                        '&:hover': { bgcolor: '#323232' },
+                      }}
+                      fullWidth
+                      onClick={handleFavoritesList}
+                    >
+                      {t('FavoritesButton')}
+                    </Button>
+                  </span>
+                </Tooltip>
               </Box>
             </Box>
           </Box>
@@ -262,14 +452,16 @@ function Checker() {
           )}
         </Paper>
 
-      </Container>
+      </Container >
       <Footer />
-      {loading && (
-        <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CircularProgress sx={{ color: 'white' }} />
-          <Typography variant="h6" sx={{ ml: 2, color: 'white' }}>{t('TranscribeButton2')}</Typography>
-        </Box>
-      )}
+      {
+        loading && (
+          <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress sx={{ color: 'white' }} />
+            <Typography variant="h6" sx={{ ml: 2, color: 'white' }}>{t('TranscribeButton2')}</Typography>
+          </Box>
+        )
+      }
     </>
   );
 }

@@ -169,15 +169,15 @@ function Navbar({ component }) {
             Feedback
           </Button>
           <IconButton
-            sx={{ color: '#ffffff', border: '2px solid #ffffff', borderRadius: '50%', padding: 0}}
+            sx={{ color: '#ffffff', border: '2px solid #ffffff', borderRadius: '50%', padding: 0 }}
             onClick={handleMenuOpen}
           >
             {/* Si isAuthenticated es verdadero y hay una imagen, renderizar la imagen dentro del botón */}
-            {isAuthenticated && (image || session?.user?.image)? (
-              <img src={session?.user?.image || image} alt="User Image" style={{ width: '100%', height: '100%', borderRadius: '50%', maxHeight: 40 , maxWidth: 40}} />
+            {isAuthenticated && (image || session?.user?.image) ? (
+              <img src={session?.user?.image || image} alt="User Image" style={{ width: '100%', height: '100%', borderRadius: '50%', maxHeight: 40, maxWidth: 40 }} />
             ) : (
               // Si no hay imagen, renderizar el icono predeterminado
-              isAuthenticated ? <PersonIcon sx={{ fontSize: '18px', margin: 1}} /> : <MenuOpenOutlinedIcon sx={{ fontSize: '18px', margin: 1 }} />
+              isAuthenticated ? <PersonIcon sx={{ fontSize: '18px', margin: 1 }} /> : <MenuOpenOutlinedIcon sx={{ fontSize: '18px', margin: 1 }} />
             )}
           </IconButton>
           <Menu

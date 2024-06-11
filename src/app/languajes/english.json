@@ -9,9 +9,11 @@
     "TranscribeButton": "Transcribe Audio",
     "TranscribeButton2": "Transcribing...",
     "VerifyButton": "Verify Lyrics",
+    "FavoritesButton": "Favorites List",
     "Logout": "Logout",
     "Tooltip": "Upload an audio",
     "Tooltip2": "Write or transcribe some lyrics",
+    "Tooltip4": "Get your favorites list",
     "FileUploaded": "File Uploaded",
     "DeleteButton": "Delete",
     "ProtectYourLyrics": "Protect Your Lyrics",
@@ -50,5 +52,6 @@
     "ModalSugg": "If you want suggestions for changing the letter, click",
     "ModalButton": "Receive options",
     "ModalWaiting": "Analyzing...",
-    "Tooltip3": "Only 60 seconds will be transcribed. It is recommended to choose the most memorable minute"
+    "Tooltip3": "Only 60 seconds will be transcribed. It is recommended to choose the most memorable minute",
+    "FavoritesAlert": "Added to favorites!"
 }

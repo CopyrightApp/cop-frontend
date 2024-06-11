@@ -9,9 +9,11 @@
     "TranscribeButton": "Transcribir Audio",
     "TranscribeButton2": "Transcribiendo...",
     "VerifyButton": "Verificar Letras",
+    "FavoritesButton": "Lista de favoritos",
     "Logout": "Cerrar Sesión",
     "Tooltip": "Subir un audio",
     "Tooltip2": "Escribir o transcribir algunas letras",
+    "Tooltip3": "Mira la lista de tus favoritos",
     "FileUploaded": "Archivo Subido",
     "DeleteButton": "Eliminar",
     "ProtectYourLyrics": "Protege Tus Letras",
@@ -50,5 +52,6 @@
     "ModalSugg": "Si quieres sugerencias para el cambio de letra da click en",
     "ModalButton": "Recibir opciones",
     "ModalWaiting": "Analizando...",
-    "Tooltip3": "Sólo se transcribirán 60 segundos. Se recomienda escoger el minuto más memorable"
-}
+    "Tooltip3": "Sólo se transcribirán 60 segundos. Se recomienda escoger el minuto más memorable",
+    "FavoritesAlert": "Se ha agregado a favoritos!"
+    }
