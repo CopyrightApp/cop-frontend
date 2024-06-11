@@ -1,11 +1,13 @@
-export const handleTranscribe = async (file) => {
+export const handleTranscribe = async (file, language) => {
     const formData = new FormData();
     formData.append('audio', file);
-  
+    formData.append('language', JSON.stringify(language))
+    console.log("Idioma seleccionado en la api:", language)
+    
     try {
       const response = await fetch('http://localhost:4000/transcribe/audio', {
         method: 'POST',
-        body: formData,
+        body: formData
       });
   
       if (response.ok) {

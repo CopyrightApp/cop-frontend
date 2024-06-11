@@ -4,12 +4,11 @@ const nextConfig = {
       return [
         {
           source: '/',
-          destination: '/login',
+          destination: '/landing',
           permanent: false,
         },
       ];
-    },
-  };
+    },  
+};
   
-  export default nextConfig;
-  
+export default nextConfig;

@@ -1,6 +1,11 @@
+/** @type {import('jest').Config} */
+
 module.exports = {
-    transform: {
-      '^.+\\.js$': 'babel-jest',
-    },
-  };
-  
+  transform: {
+    '^.+\\.(js|jsx)$': 'babel-jest',
+  },
+  moduleNameMapper: {
+    "\\.(scss|sass|css)$": "identity-obj-proxy"
+  },
+  "testEnvironment": "jsdom"
+};

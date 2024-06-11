@@ -5,11 +5,11 @@ import i18n from "../i18n";
 const Context = createContext();
 
 export function AppWrapper({ children }) {
-  const [language, setLanguage] = useState("English"); 
+  const [language, setLanguage] = useState("");
+  const [suggestion, setSuggestion] = useState('');
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language");
-    console.log("entré?", storedLanguage)
     if (storedLanguage) {
       setLanguage(storedLanguage);
     } 
@@ -17,12 +17,11 @@ export function AppWrapper({ children }) {
 
   useEffect(() => {
     i18n.changeLanguage(language);
-    console.log("hola", language)
     localStorage.setItem("language", language);
   }, [language]);
 
   return (
-    <Context.Provider value={{ language, setLanguage }}>
+    <Context.Provider value={{ language, setLanguage, suggestion, setSuggestion }}>
       {children}
     </Context.Provider>
   );

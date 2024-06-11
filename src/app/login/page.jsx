@@ -5,6 +5,8 @@ import withAuth from '../utils/withAuth';
 import Cookies from 'js-cookie'
 import jwt from 'jsonwebtoken';
 import './styles.css'
+import { signIn, useSession } from "next-auth/react";
+
 
 import { Button } from '@mui/material';
 
@@ -21,6 +23,7 @@ function Login() {
     const [isVerifying, setIsVerifying] = useState(true);
     const [isError, setIsError] = useState(false)
     const [alertValue, setAlertValue] = useState()
+    const { data: session } = useSession();
 
 
     const handleRegister = () => {
@@ -79,12 +82,13 @@ function Login() {
 
     useEffect(() => {
         const token = Cookies.get('jwtToken');
-        if (token) {
+        if (session || token) {
             router.push('/checker');
         } else {
             setIsVerifying(false);
         }
-    }, [router]);
+
+    }, [router, session]);
     if (isVerifying) {
         return <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100 min-w-screen">
             <div className="flex space-x-2 animate-pulse">
@@ -98,7 +102,7 @@ function Login() {
 
     return (
         <>
-            <Navbar />
+            <Navbar component={false} />
             <section >
                 <div className="grid grid-cols-12 gap-4">
                     <div className="w-full col-span-5 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -161,7 +165,14 @@ function Login() {
                                         <span onClick={handleGoogle}>{t('ContinueWithGoogle')}</span>
                                     </button>
                                     <button
-                                        className="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                        className="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                        onClick={async (e) => {
+                                            e.preventDefault()
+                                            const result = await signIn("github", {
+                                                callbackUrl: "/checker",
+                                                redirect: false,
+                                            });
+                                        }}>
                                         <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 73 73" version="1.1">
                                             <g id="team-collaboration/version-control/github" stroke="none" strokeWidth="1" fill="none"
