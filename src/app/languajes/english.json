@@ -9,9 +9,11 @@
     "TranscribeButton": "Transcribe Audio",
     "TranscribeButton2": "Transcribing...",
     "VerifyButton": "Verify Lyrics",
+    "FavoritesButton": "Favorites List",
     "Logout": "Logout",
     "Tooltip": "Upload an audio",
     "Tooltip2": "Write or transcribe some lyrics",
+    "Tooltip3": "Get your favorites list",
     "FileUploaded": "File Uploaded",
     "DeleteButton": "Delete",
     "ProtectYourLyrics": "Protect Your Lyrics",
@@ -43,5 +45,6 @@
     "RegisterMessage": "The user has been successfully registered",
     "LoginEmptyFields": "All fields are required for logging in",
     "InvalidInfoLogin": "Invalid email or password",
-    "ServerErrorLogin": "An unexpected error occurred, please try again later"
+    "ServerErrorLogin": "An unexpected error occurred, please try again later",
+    "FavoritesAlert": "Added to favorites!"
 }

@@ -9,9 +9,11 @@
     "TranscribeButton": "Transcribir Audio",
     "TranscribeButton2": "Transcribiendo...",
     "VerifyButton": "Verificar Letras",
+    "FavoritesButton": "Lista de favoritos",
     "Logout": "Cerrar Sesión",
     "Tooltip": "Subir un audio",
     "Tooltip2": "Escribir o transcribir algunas letras",
+    "Tooltip3": "Mira la lista de tus favoritos",
     "FileUploaded": "Archivo Subido",
     "DeleteButton": "Eliminar",
     "ProtectYourLyrics": "Protege Tus Letras",
@@ -43,5 +45,6 @@
     "RegisterMessage": "El usuario se ha registrado correctamente",
     "LoginEmptyFields": "Llena todos los campos para poder ingresar",
     "InvalidInfoLogin": "Email o contraseña incorrectos",
-    "ServerErrorLogin": "Ocurrió un error inesperado, inténtalo más tarde"
+    "ServerErrorLogin": "Ocurrió un error inesperado, inténtalo más tarde",
+    "FavoritesAlert": "Se ha agregado a favoritos!"
     }
