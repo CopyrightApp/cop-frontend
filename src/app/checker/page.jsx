@@ -47,6 +47,10 @@ function Checker() {
     "aleman":{
       "codigo": "de-DE",
       "model": "latest_long"
+    },
+    "portugues":{
+      "codigo": "pt-BR",
+      "model": "latest_long"
     }
   }
   const [profileImageUrl, setProfileImageUrl] = useState('');
@@ -158,24 +162,28 @@ function Checker() {
                   </label>
                 )}
               </Box>
-              <Box mt={2}>
+              <Box mt={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                 <FormControl fullWidth>
-                  <InputLabel id="language-select-label">{t('Language')}</InputLabel>
+                  <InputLabel id="language-select-label">Language</InputLabel>
                   <Select
                     labelId="language-select-label"
                     id="language-select"
                     value={selectedLanguage}
-                    label={t('Language')}
+                    label='Language'
                     onChange={handleLanguageChange}
+                    MenuProps={{
+                      PaperProps: { style: { maxHeight: '15%', borderColor:'black',  } }
+                    }}
                   >
-                    <MenuItem value="aleman">{t('Alemán')}</MenuItem>
-                    <MenuItem value="espanol">{t('Español')}</MenuItem>
-                    <MenuItem value="frances">{t('Francés')}</MenuItem>
-                    <MenuItem value="ingles">{t('Inglés')}</MenuItem>
-                    <MenuItem value="italiano">{t('Italiano')}</MenuItem>
+                    <MenuItem value="aleman">German</MenuItem>
+                    <MenuItem value="espanol">Español</MenuItem>
+                    <MenuItem value="frances">French</MenuItem>
+                    <MenuItem value="ingles">English</MenuItem>
+                    <MenuItem value="italiano">Italian</MenuItem>
+                    <MenuItem value="portugues">Portuguese</MenuItem>
                   </Select>
                 </FormControl>
-            </Box>
+              </Box>
             </Box>
             <Box mt={2}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>

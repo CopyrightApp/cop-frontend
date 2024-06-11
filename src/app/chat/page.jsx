@@ -29,7 +29,6 @@ const Chat = () => {
   useEffect(() => {
     console.log("change",change)
     if (change === 'true') {
-      console.log("entré???SD")
       localStorage.removeItem('messages');
       setMessages([{ role: 'bot', content: t('ChatFirstBot') }]);
     }

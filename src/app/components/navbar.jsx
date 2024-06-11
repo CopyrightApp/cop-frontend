@@ -27,9 +27,7 @@ function Navbar({ component, image }) {
   const [feedback, setFeedback] = useState('');
   const { setLanguage } = useAppContext();
   const { data: session, status } = useSession(); // Hook de NextAuth.js
-
-
-  const chat = localStorage.getItem('getin');
+  const [chat, setChat] = useState(false);
 
   const handleChangeLanguage = (newLanguage) => {
     localStorage.setItem('language', newLanguage);
@@ -49,6 +47,7 @@ function Navbar({ component, image }) {
       Cookies.remove('jwtToken');
       setIsAuthenticated(false);
       handleMenuClose();
+      localStorage.clear()
     } else[
       signOut()
     ]
@@ -95,6 +94,9 @@ function Navbar({ component, image }) {
     const nextAuthSession = await getSession();
     if (token || nextAuthSession)
       setIsAuthenticated(true);
+
+    const getin = localStorage.getItem('getin');
+    setChat(getin)
   }, []);
 
   return (

@@ -5,7 +5,7 @@ import withAuth from '../utils/withAuth';
 import Cookies from 'js-cookie'
 import jwt from 'jsonwebtoken';
 import './styles.css'
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 
 import { Button } from '@mui/material';
@@ -23,7 +23,7 @@ function Login() {
     const [isVerifying, setIsVerifying] = useState(true);
     const [isError, setIsError] = useState(false)
     const [alertValue, setAlertValue] = useState()
-
+    const { data: session } = useSession();
 
 
     const handleRegister = () => {
@@ -82,13 +82,13 @@ function Login() {
 
     useEffect(() => {
         const token = Cookies.get('jwtToken');
-        if (token) {
+        if (session || token) {
             router.push('/checker');
         } else {
             setIsVerifying(false);
         }
 
-    }, [router]);
+    }, [router, session]);
     if (isVerifying) {
         return <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100 min-w-screen">
             <div className="flex space-x-2 animate-pulse">
