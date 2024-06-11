@@ -4,7 +4,7 @@ import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Too
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import withAuth from '../utils/withAuth';
 import { handleTranscribe } from '../functionsApi/api';
 import './styles.css';
@@ -13,7 +13,7 @@ import Navbar from '../components/navbar';
 import ModalRes from '../components/modalRes';
 import { useAppContext } from '../context/index';
 
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 function Checker() {
   const [file, setFile] = useState(null);
@@ -27,7 +27,6 @@ function Checker() {
   const { language } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('ingles');
-
   const languages = {
     "espanol":{
       "codigo": "es-US",
@@ -50,8 +49,9 @@ function Checker() {
       "model": "latest_long"
     }
   }
-
+  const [profileImageUrl, setProfileImageUrl] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams()
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -116,13 +116,19 @@ function Checker() {
   const handleLanguageChange = (event) => {
     setSelectedLanguage(event.target.value);
   };
+ 
+  useEffect(() => {
+    const image = searchParams.get('image')
+    setProfileImageUrl(image)
+    console.log(image)
+  }, []);
 
   return (
     <>
-      <Navbar component={false}/>
+      <Navbar component={false} image={profileImageUrl} />
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
-        <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt:'50px' }}>
-          <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display:'flex', justifyContent:'center', alignItems:'center' }}>
+        <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt: '50px' }}>
+          <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {t('Title')}
           </Typography>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
@@ -233,23 +239,23 @@ function Checker() {
                 </Tooltip>
               </Box>
             </Box>
-        </Box>
-        {showModal && (
+          </Box>
+          {showModal && (
             <ModalRes
               open={showModal}
               loading={loading}
               result={lyricCheck}
               onClose={handleCloseModal}
             />
-        )}
-      </Paper>
+          )}
+        </Paper>
 
-    </Container>
-    <Footer />
-    {loading && (
+      </Container>
+      <Footer />
+      {loading && (
         <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CircularProgress sx={{color:'white'}} />
-          <Typography variant="h6" sx={{ ml: 2, color:'white' }}>{t('TranscribeButton2')}</Typography>
+          <CircularProgress sx={{ color: 'white' }} />
+          <Typography variant="h6" sx={{ ml: 2, color: 'white' }}>{t('TranscribeButton2')}</Typography>
         </Box>
       )}
     </>

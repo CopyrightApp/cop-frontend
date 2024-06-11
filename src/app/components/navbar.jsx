@@ -9,12 +9,15 @@ import PersonIcon from '@mui/icons-material/Person';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import './styles.css';
+import { getSession, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+
 
 import { useAppContext } from "../context";
 
 const languages = ['English', 'Español', 'French', 'German', 'Chinese', 'Italian', 'Portuguese', 'Japanese'];
 
-function Navbar({ component }) {
+function Navbar({ component, image }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [anchorEl, setAnchorEl] = useState(null);
@@ -23,6 +26,8 @@ function Navbar({ component }) {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
   const { setLanguage } = useAppContext();
+  const { data: session, status } = useSession(); // Hook de NextAuth.js
+
 
   const chat = localStorage.getItem('getin');
 
@@ -40,9 +45,13 @@ function Navbar({ component }) {
   };
 
   const handleLogout = () => {
-    Cookies.remove('jwtToken');
-    setIsAuthenticated(false);
-    handleMenuClose();
+    if (Cookies.get('jwtToken')) {
+      Cookies.remove('jwtToken');
+      setIsAuthenticated(false);
+      handleMenuClose();
+    } else[
+      signOut()
+    ]
   };
 
   const handleModalOpen = () => {
@@ -81,25 +90,27 @@ function Navbar({ component }) {
     setIsFeedbackModalOpen(false);
   };
 
-  useEffect(() => {
+  useEffect(() => async () => {
     const token = Cookies.get('jwtToken');
-    setIsAuthenticated(!!token);
+    const nextAuthSession = await getSession();
+    if (token || nextAuthSession)
+      setIsAuthenticated(true);
   }, []);
 
   return (
     <>
-      <Box 
-        id="toolbar" 
+      <Box
+        id="toolbar"
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 16px',
           height: '64px',
-          backgroundColor: '#333', 
+          backgroundColor: '#333',
         }}
       >
-        <Box 
+        <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -137,11 +148,11 @@ function Navbar({ component }) {
           {component ? <Button 
             variant="outlined"
             onClick={() => window.location.href = '/checker'}
-            sx={{ color: '#ffffff', borderColor: '#ffffff', mr: 2, borderRadius: '20px', '&:hover': { borderColor: '#323232' } }} 
+            sx={{ color: '#ffffff', borderColor: '#ffffff', mr: 2, borderRadius: '20px', '&:hover': { borderColor: '#323232' } }}
           >
             New Check
           </Button>
-          : null
+            : null
           }
           <Button 
             variant="outlined" 
@@ -150,13 +161,17 @@ function Navbar({ component }) {
           >
             Feedback
           </Button>
-          <IconButton 
-            sx={{ color: '#ffffff', border: '2px solid #ffffff', borderRadius: '50%' }} 
+          <IconButton
+            sx={{ color: '#ffffff', border: '2px solid #ffffff', borderRadius: '50%', padding: 0}}
             onClick={handleMenuOpen}
           >
-            { isAuthenticated ? <PersonIcon sx={{fontSize:'18px'}}/> :
-              <MenuOpenOutlinedIcon sx={{fontSize:'18px'}}/>
-            }
+            {/* Si isAuthenticated es verdadero y hay una imagen, renderizar la imagen dentro del botón */}
+            {isAuthenticated && (image || session?.user?.image)? (
+              <img src={session?.user?.image || image} alt="User Image" style={{ width: '100%', height: '100%', borderRadius: '50%', maxHeight: 40 , maxWidth: 40}} />
+            ) : (
+              // Si no hay imagen, renderizar el icono predeterminado
+              isAuthenticated ? <PersonIcon sx={{ fontSize: '18px', margin: 1}} /> : <MenuOpenOutlinedIcon sx={{ fontSize: '18px', margin: 1 }} />
+            )}
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -178,9 +193,9 @@ function Navbar({ component }) {
               },
             }}
           >
-            <MenuItem onClick={isAuthenticated ? handleLogout : handleMenuClose}>     
+            <MenuItem onClick={isAuthenticated ? handleLogout : handleMenuClose}>
               <Link href="/login">
-                <LoginIcon sx={{ mr: 1 }} />  
+                <LoginIcon sx={{ mr: 1 }} />
                 {isAuthenticated ? 'Logout' : 'Login'}
               </Link>
             </MenuItem>
@@ -198,7 +213,7 @@ function Navbar({ component }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box 
+        <Box
           sx={{
             position: 'absolute',
             top: '50%',
@@ -219,7 +234,7 @@ function Navbar({ component }) {
           <List>
             {languages.map((language) => (
               <ListItem key={language}>
-                <ListItemButton sx={{color:'black'}} onClick={() => handleChangeLanguage(language)}>
+                <ListItemButton sx={{ color: 'black' }} onClick={() => handleChangeLanguage(language)}>
                   {language}
                 </ListItemButton>
               </ListItem>
