@@ -17,7 +17,7 @@ import { useAppContext } from "../context";
 
 const languages = ['English', 'Español', 'French', 'German', 'Chinese', 'Italian', 'Portuguese', 'Japanese'];
 
-function Navbar({ component, image }) {
+function Navbar({ component }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,6 +28,7 @@ function Navbar({ component, image }) {
   const { setLanguage } = useAppContext();
   const { data: session, status } = useSession(); // Hook de NextAuth.js
   const [chat, setChat] = useState(false);
+  const [image, setImage] = useState();
 
   const handleChangeLanguage = (newLanguage) => {
     localStorage.setItem('language', newLanguage);
@@ -43,11 +44,11 @@ function Navbar({ component, image }) {
   };
 
   const handleLogout = () => {
+    localStorage.clear()
     if (Cookies.get('jwtToken')) {
       Cookies.remove('jwtToken');
       setIsAuthenticated(false);
       handleMenuClose();
-      localStorage.clear()
     } else[
       signOut()
     ]
@@ -97,6 +98,10 @@ function Navbar({ component, image }) {
 
     const getin = localStorage.getItem('getin');
     setChat(getin)
+
+    const img = localStorage.getItem('image');
+    console.log("img",img)
+    setImage(img);
   }, []);
 
   return (

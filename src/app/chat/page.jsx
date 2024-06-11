@@ -107,7 +107,7 @@ const Chat = () => {
 
   return (
     <>
-      <Navbar component={true}/>
+      <Navbar component={true} />
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Container maxWidth="md" style={{ padding: '1rem', flex: 1, marginTop: '5rem', position: 'relative', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
           {messages.map((message, index) => (

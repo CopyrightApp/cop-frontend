@@ -123,13 +123,14 @@ function Checker() {
  
   useEffect(() => {
     const image = searchParams.get('image')
-    setProfileImageUrl(image)
-    console.log(image)
+    if (image) {
+      localStorage.setItem('image', image)
+    }
   }, []);
 
   return (
     <>
-      <Navbar component={false} image={profileImageUrl} />
+      <Navbar component={false} />
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
         <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt: '50px' }}>
           <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
