@@ -18,7 +18,7 @@ describe('handleTranscribe', () => {
         });
 
         const file = new File(['test audio content'], 'audio.mp3', { type: 'audio/mp3' });
-        const result = await handleTranscribe(file);
+        const result = await handleTranscribe(file, {"code":"es-US", "model":"latest_long"});
 
         expect(result).toEqual({ success: true, transcription: mockTranscription });
     }, 10000);

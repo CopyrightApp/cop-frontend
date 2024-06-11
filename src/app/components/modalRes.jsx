@@ -2,6 +2,7 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useAppContext } from '../context/index';
+import { useTranslation } from 'react-i18next';
 
 const style = {
   position: 'absolute',
@@ -14,6 +15,7 @@ const style = {
   boxShadow: 24,
   p: 4,
   color: 'black',
+  borderRadius:'15px'
 };
 
 const secondaryContainerStyle = {
@@ -26,6 +28,7 @@ const secondaryContainerStyle = {
   alignItems: 'center',
   justifyContent:'center',
   gap: '20px',
+  borderRadius:'15px'
 };
 
 const secondaryStyle = {
@@ -36,6 +39,7 @@ const secondaryStyle = {
   p: 4,
   color: 'black',
   cursor: 'pointer',
+  borderRadius:'15px'
 };
 
 const modalTitleStyle = {
@@ -48,11 +52,13 @@ const modalTitleStyle = {
 const ModalRes = ({ open, loading, result, onClose }) => {
   const [openPart2, setOpenPart2] = useState(false);
   const [openPart3, setOpenPart3] = useState(false);
+  const { t } = useTranslation();
   const router = useRouter();
   const { setSuggestion } = useAppContext();
   const [splitResultData, setSplitResultData] = useState(null);
 
   const splitResult = (text) => {
+    console.log("text", text)
     const hasAsterisk = text.includes('*');
     if (!hasAsterisk) {
       return { part1: text, part2: '', part3: '' };
@@ -83,6 +89,7 @@ const ModalRes = ({ open, loading, result, onClose }) => {
 
   const handleModalClick = (text) => {
     setSuggestion(text);
+    localStorage.setItem('change', true);
     localStorage.setItem('suggestion', text);
     localStorage.setItem('song', splitResultData.part1);
     router.push('/chat');
@@ -99,7 +106,7 @@ const ModalRes = ({ open, loading, result, onClose }) => {
         <Box sx={style}>
           {loading ? (
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Esperando análisis...
+              {t('ModalWaiting')}
             </Typography>
           ) : (
             <>
@@ -110,9 +117,9 @@ const ModalRes = ({ open, loading, result, onClose }) => {
                   </Typography>
                   {splitResultData.part2 || splitResultData.part3 ? (
                     <Typography variant="body1" component="p" sx={{ mt: 2 }}>
-                      Si quieres sugerencias para el cambio de letra da click en{' '}
+                      {t('ModalSugg')}{' '}
                       <Button onClick={handleSecondaryOpen} color="primary">
-                        recibir opciones
+                      {t('ModalButton')}
                       </Button>
                     </Typography>
                   ) : null}
@@ -130,25 +137,25 @@ const ModalRes = ({ open, loading, result, onClose }) => {
       >
         <Box sx={secondaryContainerStyle}>
           <Typography variant="h6" component="p" sx={modalTitleStyle}>
-            ¿Cuál opción prefieres para recibir más retroalimentación acerca de ella?
+          {t('ModalRes')}
           </Typography>
           <Box sx={{ display: 'flex', gap: '20px' }}>
             {splitResultData && (
               <>
-                {splitResultData.part2 && (
+                {splitResultData.part2 ? (
                   <Box sx={secondaryStyle} onClick={() => handleModalClick(splitResultData.part2)}> 
                     <Typography id="modal-part2-title" variant="h6" component="h2">
                       {splitResultData.part2}
                     </Typography>
                   </Box>
-                )}
-                {splitResultData.part3 && (
+                ): null}
+                {splitResultData.part3 ? (
                   <Box sx={secondaryStyle} onClick={() => handleModalClick(splitResultData.part3)}>
                     <Typography id="modal-part3-title" variant="h6" component="h2">
                       {splitResultData.part3}
                     </Typography>
                   </Box>
-                )}
+                ): null}
               </>
             )}
           </Box>

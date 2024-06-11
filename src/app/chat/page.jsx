@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, use } from 'react';
 import { Container, TextareaAutosize, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Message from '../components/message';
@@ -7,16 +7,49 @@ import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import withAuth from '../utils/withAuth';
 import { useAppContext } from '../context/index';
+import { useTranslation } from 'react-i18next'; 
 
 import './styles.css';
 
 const Chat = () => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([{role: 'bot', content: '¡Hola! ¿Qué más quieres indagar sobre la sugerencia que te di? '}]);
+  const [getin, setGetin] = useState(false);
+  const { t, i18n } = useTranslation();
   const [song, setSong] = useState('');
+  const [messages, setMessages] = useState(() => {
+    const storedMessages = localStorage.getItem('messages');
+    return storedMessages ? JSON.parse(storedMessages) : [{ role: 'bot', content: t('ChatFirstBot') }];
+  });
   const [lyrics, setLyrics] = useState('');
   const messagesEndRef = useRef(null);
   const { suggestion, setSuggestion } = useAppContext();
+
+  const change = localStorage.getItem('change');
+
+  useEffect(() => {
+    console.log("change",change)
+    if (change === 'true') {
+      console.log("entré???SD")
+      localStorage.removeItem('messages');
+      setMessages([{ role: 'bot', content: t('ChatFirstBot') }]);
+    }
+    localStorage.setItem('change',false);
+  }, [change]);
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([{ role: 'bot', content: t('ChatFirstBot') }]);
+    }
+  }, [i18n.language, messages.length]);
+
+  useEffect(() => {
+    setGetin(true);
+    localStorage.setItem('getin', getin);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('messages', JSON.stringify(messages));
+  }, [messages]);
 
   useEffect(() => {
     const storedSuggestion = localStorage.getItem('suggestion');
@@ -27,12 +60,15 @@ const Chat = () => {
       setLyrics(storedLyric);
       setSong(storedSong);
     }
+
   }, [setSuggestion]);
+
 
   const userInput = async () => {
     if (!message.trim()) return;
 
-    setMessages([...messages, { role: 'user', content: message }]);
+    const updatedMessages = [...messages, { role: 'user', content: message }];
+    setMessages(updatedMessages);
     setMessage('');
 
     try {
@@ -49,7 +85,7 @@ const Chat = () => {
       }
 
       const responseData = await response.json();
-      setMessages([...messages, { role: 'user', content: message }, { role: 'bot', content: responseData.choices[0].message.content }]);
+      setMessages([...updatedMessages, { role: 'bot', content: responseData.choices[0].message.content }]);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -84,7 +120,7 @@ const Chat = () => {
           <TextareaAutosize
             minRows={1}
             maxRows={6}
-            placeholder="¿Qué quieres preguntar acerca de tu letra?"
+            placeholder={t('ChatPlaceHolder')}
             style={{ width: '100%', marginRight: '0.1rem', color: 'white', backgroundColor: 'black', padding: '0.7rem', border: '1px solid', borderRadius: '30px', borderColor: '#DEDEDE' }}
             value={message}
             onChange={(e) => setMessage(e.target.value)}

@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress } from '@mui/material';
+import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress, MenuItem, Select, FormControl, InputLabel  } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useRouter, useSearchParams } from 'next/navigation';
 import withAuth from '../utils/withAuth';
 import { handleTranscribe } from '../functionsApi/api';
@@ -10,6 +11,7 @@ import './styles.css';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 import ModalRes from '../components/modalRes';
+import { useAppContext } from '../context/index';
 
 import { useTranslation } from 'react-i18next';
 
@@ -22,10 +24,32 @@ function Checker() {
   const [lyricsVerified, setLyricsVerified] = useState(false);
   const [lyricCheck, setLyricCheck] = useState("");
   const { t } = useTranslation();
+  const { language } = useAppContext();
   const [showModal, setShowModal] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('ingles');
+  const languages = {
+    "espanol":{
+      "codigo": "es-US",
+      "model": "latest_long"
+    },
+    "ingles":{
+      "codigo": "en-US",
+      "model": "latest_long"
+    },
+    "frances":{
+      "codigo": "fr-FR",
+      "model": "latest_long"
+    },
+    "italiano":{
+      "codigo": "it-IT",
+      "model": "latest_long"
+    },
+    "aleman":{
+      "codigo": "de-DE",
+      "model": "latest_long"
+    }
+  }
   const [profileImageUrl, setProfileImageUrl] = useState('');
-
-
   const router = useRouter();
   const searchParams = useSearchParams()
 
@@ -36,7 +60,7 @@ function Checker() {
 
   const transcribeFile = async () => {
     setLoading(true);
-    const result = await handleTranscribe(file);
+    const result = await handleTranscribe(file, languages[selectedLanguage]);
 
     if (result.success) {
       setTranscription(result.transcription);
@@ -65,7 +89,7 @@ function Checker() {
     try {
       const response = await fetch('http://localhost:4000/verify/check', {
         method: 'POST',
-        body: JSON.stringify({ transcription }),
+        body: JSON.stringify({ transcription, language }),
         headers: {
           'Content-Type': 'application/json'
         }
@@ -73,8 +97,8 @@ function Checker() {
 
       if (response.ok) {
         const data = await response.json();
-        setLyricCheck(data.choices[0].message.content);
-        console.log(data.choices[0].message.content)
+        console.log(data);
+        setLyricCheck(data);
       } else {
         console.error('Error al recibir la letra');
       }
@@ -89,13 +113,17 @@ function Checker() {
     setShowModal(false);
   };
 
+  const handleLanguageChange = (event) => {
+    setSelectedLanguage(event.target.value);
+  };
+ 
   useEffect(() => {
     const image = searchParams.get('image')
     setProfileImageUrl(image)
     console.log(image)
   }, []);
 
-  return (  
+  return (
     <>
       <Navbar component={false} image={profileImageUrl} />
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
@@ -105,8 +133,11 @@ function Checker() {
           </Typography>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
             <Box mt={2}>
-              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
                 {t('UploadAudio')}
+                <Tooltip title={t('Tooltip3')} arrow>
+                  <HelpOutlineIcon sx={{ ml: 1, cursor: 'pointer' }} />
+                </Tooltip>
               </Typography>
               <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
                 {fileUploaded ? (
@@ -127,6 +158,24 @@ function Checker() {
                   </label>
                 )}
               </Box>
+              <Box mt={2}>
+                <FormControl fullWidth>
+                  <InputLabel id="language-select-label">{t('Language')}</InputLabel>
+                  <Select
+                    labelId="language-select-label"
+                    id="language-select"
+                    value={selectedLanguage}
+                    label={t('Language')}
+                    onChange={handleLanguageChange}
+                  >
+                    <MenuItem value="aleman">{t('Alemán')}</MenuItem>
+                    <MenuItem value="espanol">{t('Español')}</MenuItem>
+                    <MenuItem value="frances">{t('Francés')}</MenuItem>
+                    <MenuItem value="ingles">{t('Inglés')}</MenuItem>
+                    <MenuItem value="italiano">{t('Italiano')}</MenuItem>
+                  </Select>
+                </FormControl>
+            </Box>
             </Box>
             <Box mt={2}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -143,10 +192,12 @@ function Checker() {
                   setLyricsVerified(true);
                 }}
               />
+
               <Box mt={2}>
                 <Tooltip title={t('Tooltip')} disableHoverListener={file} arrow>
                   <span>
                     <Button
+                      data-testid="transcribe-button"
                       variant="contained"
                       sx={{
                         fontSize: '100%',
