@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress,  MenuItem, Select, FormControl, InputLabel, IconButton, Alert, Modal, Divider } from '@mui/material';
+import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress, MenuItem, Select, FormControl, InputLabel, IconButton, Alert, Modal, Divider } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import Cookies from 'js-cookie';
@@ -43,27 +43,27 @@ function Checker() {
   const [showModal, setShowModal] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('ingles');
   const languages = {
-    "espanol":{
+    "espanol": {
       "codigo": "es-US",
       "model": "latest_long"
     },
-    "ingles":{
+    "ingles": {
       "codigo": "en-US",
       "model": "latest_long"
     },
-    "frances":{
+    "frances": {
       "codigo": "fr-FR",
       "model": "latest_long"
     },
-    "italiano":{
+    "italiano": {
       "codigo": "it-IT",
       "model": "latest_long"
     },
-    "aleman":{
+    "aleman": {
       "codigo": "de-DE",
       "model": "latest_long"
     },
-    "portugues":{
+    "portugues": {
       "codigo": "pt-BR",
       "model": "latest_long"
     }
@@ -167,7 +167,7 @@ function Checker() {
   const handleLanguageChange = (event) => {
     setSelectedLanguage(event.target.value);
   };
- 
+
   useEffect(() => {
     let imageFromParams = searchParams.get('image')
     if (imageFromParams) {
@@ -239,7 +239,6 @@ function Checker() {
       if (response.ok) {
         const data = await response.json();
         setHistory(data.history)
-        console.log("El historial es ", data.history)
       } else {
         console.error('Error al recibir el historial');
       }
@@ -251,6 +250,36 @@ function Checker() {
 
   const handleCloseFavoritesList = () => {
     setShowModalFavorites(false)
+  }
+
+  const handleDeleteHistory = async (event) => {
+    const index = event.currentTarget.getAttribute('data-index');
+    try {
+      var token = ""
+      if (Cookies.get('jwtToken')) {
+        token = Cookies.get('jwtToken')
+      } else {
+        //En la validación de github entraría en este condicional.
+        token = ""
+      }
+      const response = await fetch(`http://localhost:4000/history/${index}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setHistory(data.history)
+      } else {
+        console.error('Error al recibir el historial');
+      }
+    } catch (error) {
+      console.log('Error de red:', error);
+    }
+
   }
 
 
@@ -287,12 +316,13 @@ function Checker() {
             {t("FavoritesButton")}
           </Typography>
           <List sx={{ maxHeight: 400, overflow: 'auto', color:'black' }}>
-            {history.map((item) => (
+            {history.map((item, index) => (
               <><ListItem>
                 <ListItemAvatar>
                   {profileImageUrl ? <Avatar alt="Remy Sharp" src={profileImageUrl} /> : (<PersonIcon />)}
                 </ListItemAvatar>
                 <ListItemText primary={item.details} secondary={formatTimestampTo12Hour(item.timestamp)} />
+                <IconButton onClick={handleDeleteHistory} data-index={index + 1} variant="outlined"><DeleteIcon /></IconButton>
               </ListItem><Divider /></>
             ))}
           </List>
@@ -331,7 +361,7 @@ function Checker() {
                   </label>
                 )}
               </Box>
-              <Box mt={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+              <Box mt={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <FormControl fullWidth>
                   <InputLabel id="language-select-label">{t('InputLabel')}</InputLabel>
                   <Select
@@ -341,7 +371,7 @@ function Checker() {
                     label={t('InputLabel')}
                     onChange={handleLanguageChange}
                     MenuProps={{
-                      PaperProps: { style: { maxHeight: '15%', borderColor:'black',  } }
+                      PaperProps: { style: { maxHeight: '15%', borderColor: 'black', } }
                     }}
                   >
                     <MenuItem value="aleman">{t('German')}</MenuItem>
