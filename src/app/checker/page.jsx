@@ -169,13 +169,18 @@ function Checker() {
   };
  
   useEffect(() => {
-    const image = searchParams.get('image')
-    if (image) {
-      setProfileImageUrl(image)
-      localStorage.setItem('image', image)
+    let imageFromParams = searchParams.get('image')
+    if (imageFromParams) {
+      localStorage.setItem('image', imageFromParams)
       const currentUrl = window.location.toString();
       const baseUrl = currentUrl.split('?')[0];
       window.history.replaceState({}, '', baseUrl);
+      setProfileImageUrl(imageFromParams)
+    } else {
+      const imageFromStorage = localStorage.getItem('image');
+      if (imageFromStorage) {
+        setProfileImageUrl(imageFromStorage)
+      }
     }
   }, []);
 
@@ -278,10 +283,10 @@ function Checker() {
           boxShadow: 24,
           p: 4,
         }}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color:'black'}}>
             {t("FavoritesButton")}
           </Typography>
-          <List sx={{ maxHeight: 400, overflow: 'auto' }}>
+          <List sx={{ maxHeight: 400, overflow: 'auto', color:'black' }}>
             {history.map((item) => (
               <><ListItem>
                 <ListItemAvatar>
@@ -293,7 +298,7 @@ function Checker() {
           </List>
         </Box>
       </Modal>
-      <Navbar component={false} image={profileImageUrl} />
+      <Navbar component={false} />
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#F1F1F1' }}>
         <Paper elevation={3} sx={{ maxWidth: 'lg', width: '95%', p: 6, borderRadius: 2, bgcolor: 'background.paper', mt: '50px' }}>
           <Typography mb={3} variant="h3" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -307,7 +312,7 @@ function Checker() {
                   <HelpOutlineIcon sx={{ ml: 1, cursor: 'pointer' }} />
                 </Tooltip>
               </Typography>
-              <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
+              <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '43%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
                 {fileUploaded ? (
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                     <Typography variant="body2" color="textSecondary">{t('FileUploaded')}</Typography>
@@ -339,7 +344,7 @@ function Checker() {
                       PaperProps: { style: { maxHeight: '15%', borderColor:'black',  } }
                     }}
                   >
-                    <MenuItem value="aleman">{t('Germian')}</MenuItem>
+                    <MenuItem value="aleman">{t('German')}</MenuItem>
                     <MenuItem value="espanol">{t('Spanish')}</MenuItem>
                     <MenuItem value="frances">{t('French')}</MenuItem>
                     <MenuItem value="ingles">{t('English')}</MenuItem>
@@ -352,10 +357,9 @@ function Checker() {
             <Box mt={2}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', padding: 0 }}>
                 {t('Transcription')}
-                <IconButton onClick={handleSaveFavorite} aria-label="delete" sx={{ color: '#e9d700', width: 60, height: 60, padding: 0, marginLeft: 2, marginBottom: 1 }}>
-                  {isFavorite ? <StarIcon sx={{ width: '60%', height: '60%' }} /> :
-                    <StarBorder sx={{ width: '60%', height: '60%' }}
-                    />
+                <IconButton onClick={handleSaveFavorite} aria-label="delete" sx={{ color: '#e9d700', padding: 0, marginLeft: 1, marginBottom: 0.5 }}>
+                  {isFavorite ? <StarIcon sx={{fontSize:'30px'}}/> :
+                    <StarBorder sx={{fontSize:'30px'}}/>
                   }
                 </IconButton>
                 {showSnack && <Snackbar open={open} TransitionComponent={SlideTransition} autoHideDuration={6000} sx={{ marginBottom: 6 }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
@@ -420,7 +424,8 @@ function Checker() {
                     </Button>
                   </span>
                 </Tooltip>
-              </Box><Box mt={2}>
+              </Box>
+              <Box mt={2}>
                 <Tooltip title={t('Tooltip4')} disableHoverListener={!(transcription === '')} arrow>
                   <span>
                     <Button

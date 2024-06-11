@@ -1,10 +1,10 @@
 {
-    "Title": "Transcription Audio et Vérification des Paroles",
+    "Title": "Transcription et vérification des paroles",
     "UploadAudio": "Télécharger l'Audio",
     "ClickToUpload": "Cliquez pour télécharger",
     "OrDragAudio": "ou glissez-déposez",
     "TypesOfAudio": "MP3, WAV, OGG jusqu'à 100 Mo",
-    "Transcription": "Transcription et Vérification des Paroles",
+    "Transcription": "Vérification des Paroles",
     "Description": "Les paroles transcrites apparaîtront ici. Vous pouvez écrire les paroles si vous le souhaitez.",
     "TranscribeButton": "Transcrire l'Audio",
     "TranscribeButton2": "Transcription en cours...",

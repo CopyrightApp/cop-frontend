@@ -3,6 +3,12 @@ import { initReactI18next } from "react-i18next";
 
 import english from "./languajes/english.json";
 import spanish from "./languajes/spanish.json";
+import chinese from "./languajes/chinese.json";
+import french from "./languajes/french.json";
+import japanese from "./languajes/japanese.json";
+import portuguese from "./languajes/portuguese.json";
+import german from "./languajes/german.json";
+import italian from "./languajes/italian.json";
 
 const getDefaultLanguage = () => {
   if (typeof localStorage !== "undefined") {
@@ -25,6 +31,24 @@ i18n
       },
       Español: {
         translation: spanish,
+      },
+      Chinese: {
+        translation: chinese,
+      },
+      French: {
+        translation: french,
+      },
+      Japanese: {
+        translation: japanese,
+      },
+      Portuguese: {
+        translation: portuguese,
+      },
+      German: {
+        translation: german,
+      },
+      Italian: {
+        translation: italian,
       },
     },
     interpolation: {
