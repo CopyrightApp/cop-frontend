@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Button, Paper, Input, TextareaAutosize, Tooltip, CircularProgress, MenuItem, Select, FormControl, InputLabel  } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useRouter } from 'next/navigation';
 import withAuth from '../utils/withAuth';
 import { handleTranscribe } from '../functionsApi/api';
@@ -10,6 +11,7 @@ import './styles.css';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 import ModalRes from '../components/modalRes';
+import { useAppContext } from '../context/index';
 
 import { useTranslation } from 'react-i18next'; 
 
@@ -22,6 +24,7 @@ function Checker() {
   const [lyricsVerified, setLyricsVerified] = useState(false);
   const [lyricCheck, setLyricCheck] = useState("");
   const { t } = useTranslation();
+  const { language } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('ingles');
 
@@ -86,7 +89,7 @@ function Checker() {
     try {
       const response = await fetch('http://localhost:4000/verify/check', {
         method: 'POST',
-        body: JSON.stringify({ transcription }),
+        body: JSON.stringify({ transcription, language }),
         headers: {
           'Content-Type': 'application/json'
         }
@@ -94,8 +97,8 @@ function Checker() {
 
       if (response.ok) {
         const data = await response.json();
-        setLyricCheck(data.choices[0].message.content);
-        console.log(data.choices[0].message.content)
+        console.log(data);
+        setLyricCheck(data);
       } else {
         console.error('Error al recibir la letra');
       }
@@ -124,8 +127,11 @@ function Checker() {
           </Typography>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={4}>
             <Box mt={2}>
-              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
                 {t('UploadAudio')}
+                <Tooltip title={t('Tooltip3')} arrow>
+                  <HelpOutlineIcon sx={{ ml: 1, cursor: 'pointer' }} />
+                </Tooltip>
               </Typography>
               <Box display="flex" justifyContent="center" alignItems="center" sx={{ cursor: 'pointer', height: '50%', border: '2px dashed', borderColor: 'grey.400', borderRadius: 2, p: 4, bgcolor: 'grey.50', '&:hover': { bgcolor: '#eeeeee' } }}>
                 {fileUploaded ? (
