@@ -13,7 +13,7 @@
     "Logout": "Cerrar Sesión",
     "Tooltip": "Subir un audio",
     "Tooltip2": "Escribir o transcribir algunas letras",
-    "Tooltip3": "Mira la lista de tus favoritos",
+    "Tooltip4": "Mira la lista de tus favoritos",
     "FileUploaded": "Archivo Subido",
     "DeleteButton": "Eliminar",
     "ProtectYourLyrics": "Protege Tus Letras",
@@ -53,5 +53,16 @@
     "ModalButton": "Recibir opciones",
     "ModalWaiting": "Analizando...",
     "Tooltip3": "Sólo se transcribirán 60 segundos. Se recomienda escoger el minuto más memorable",
-    "FavoritesAlert": "Se ha agregado a favoritos!"
-    }
+    "FavoritesAlert": "Se ha agregado a favoritos!",
+    "German": "Alemán",
+    "Spanish": "Español",
+    "English": "Inglés",
+    "Portuguese": "Portugués",
+    "French": "Francés",
+    "Italian": "Italiano",
+    "InputLabel": "Selecciona el lenguaje del audio",
+    "Feedback": "Dejar retroalimentación",
+    "FeedbackTitle": "Nos encantaría saber qué salió bien o cómo podemos mejorar la experiencia del producto.",
+    "FeedbackPlaceholder": "Retroalimentación aquí...",
+    "FeedbackSubmit": "Enviar"
+}

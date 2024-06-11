@@ -53,5 +53,16 @@
     "ModalButton": "Receive options",
     "ModalWaiting": "Analyzing...",
     "Tooltip3": "Only 60 seconds will be transcribed. It is recommended to choose the most memorable minute",
-    "FavoritesAlert": "Added to favorites!"
+    "FavoritesAlert": "Added to favorites!",
+    "German": "German",
+    "Spanish": "Spanish",
+    "English": "English",
+    "Portuguese": "Portuguese",
+    "French": "French",
+    "Italian": "Italian",
+    "InputLabel": "Select the language of the audio",
+    "Feedback": "Leave feedback",
+    "FeedbackTitle": "We'd love to hear what went well or how we can improve the product experience.",
+    "FeedbackPlaceholder": "Your feedback here...",
+    "FeedbackSubmit": "Submit"
 }
