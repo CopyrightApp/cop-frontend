@@ -125,6 +125,9 @@ function Checker() {
     const image = searchParams.get('image')
     if (image) {
       localStorage.setItem('image', image)
+      const currentUrl = window.location.toString();
+      const baseUrl = currentUrl.split('?')[0];
+      window.history.replaceState({}, '', baseUrl);
     }
   }, []);
 
